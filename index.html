@@ -1016,6 +1016,15 @@ select.idin{background-image:linear-gradient(180deg,rgba(255,255,255,.08),rgba(2
 .mxnote{min-height:20px;margin-top:12px;font:600 13px var(--f-ui);color:#ffd58a}.mxnote.pop{animation:fadeIn .3s both}
 .mxlink{margin-top:6px;border:0;background:none;color:rgba(255,255,255,.45);font:500 13px var(--f-ui);text-decoration:underline;text-underline-offset:3px;padding:8px}
 .mxx{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:14px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;color:#fff;font:400 22px/1 var(--f-ui);background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.16)}
+
+body.bgp #nav,body.bgp .nav{opacity:0!important;pointer-events:none!important;transition:opacity .5s}
+#home.bgonly>*:not(.hbg){opacity:0!important;pointer-events:none!important;transition:opacity .5s}
+.wel{background:radial-gradient(120% 90% at 50% 40%,rgba(3,5,8,.18) 0%,rgba(3,5,8,.5) 65%,rgba(0,0,0,.82) 100%)!important;touch-action:none}
+.wel .wbg{opacity:.55}
+.wstep .whl,.wstep .idfav,.wstep .idin,.mxf .idin{touch-action:auto}
+.wplay{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 14px;border-radius:999px;font:600 12.5px var(--f-ui);letter-spacing:.02em;color:rgba(220,240,255,.8);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 .5px rgba(255,255,255,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:welPulse 3.2s 2s ease-in-out infinite}
+.wplay i{width:7px;height:7px;border-radius:50%;background:#9fe0ff;box-shadow:0 0 10px #9fe0ff}
+.wstep h1,.wstep h2,.wstep .wsub,.wstep .wk,.mixa .mxh,.mixa .wsub,.mixa .wk{text-shadow:0 2px 24px rgba(0,0,0,.55)}
 </style>
 
 <div id="bootc" style="position:fixed;inset:0;background:#000;z-index:9999;transition:opacity .5s"></div>
@@ -1366,9 +1375,9 @@ const ACCOUNT = {
 };
 function openAccountSheet(first, why) {
   const W = $('mixAuth'); if (!W.hidden) return; const si = SB.signedIn() && !SB.isAnon();
-  const close = () => { W.classList.add('out'); setTimeout(() => { W.hidden = true; W.classList.remove('out'); W.innerHTML = ''; if (first) setTimeout(ONB.next, 300); }, 600); };
+  const close = () => { W.classList.add('out'); setTimeout(() => { W.hidden = true; W.classList.remove('out'); W.innerHTML = ''; BGP.off(); if (first) setTimeout(ONB.next, 300); }, 600); };
   if (si) { W.innerHTML = `<div class="wbg"></div><button class="mxx" data-x="1" aria-label="Close">×</button><div class="mxin"><div class="wk">you're in the mix</div><h2>${SB.uname().toLowerCase()}</h2><div class="wsub">your progress is saved to your account and you're on the world leaderboard.</div><button class="primary wgo" data-x="1">back to mixing</button><button class="mxlink" data-out="1">sign out</button></div>`;
-    W.hidden = false; W.onclick = e => { if (e.target.closest('[data-out]')) { ACCOUNT.signOut(); buzz(5); renderAcSet(); toast('signed out'); close(); } else if (e.target.closest('[data-x]')) close(); }; return; }
+    W.hidden = false; BGP.on(W); W.onclick = e => { if (e.target.closest('[data-out]')) { ACCOUNT.signOut(); buzz(5); renderAcSet(); toast('signed out'); close(); } else if (e.target.closest('[data-x]')) close(); }; return; }
   let mode = 'new', failed = false;
   const draw = () => { W.innerHTML = `<div class="wbg"></div>${first ? '' : '<button class="mxx" data-x="1" aria-label="Close">×</button>'}<div class="mxin">
     <div class="wk">${why === 'lb' ? 'world leaderboard' : 'one account, every color'}</div><h1 class="mxh">get in the mix</h1>
@@ -1378,8 +1387,8 @@ function openAccountSheet(first, why) {
     <input class="idin" id="mxP" type="password" maxlength="64" autocomplete="${mode === 'new' ? 'new-password' : 'current-password'}" placeholder="password${mode === 'new' ? ' (6+ characters)' : ''}"></div>
     <button class="primary wgo" id="mxGo">${mode === 'new' ? 'create my account' : 'sign in'}</button>
     <div class="mxnote" id="mxN"></div>
-    ${failed ? '<button class="mxlink" data-off="1">play offline for now</button>' : ''}</div>`; };
-  draw(); W.hidden = false;
+    ${failed ? '<button class="mxlink" data-off="1">play offline for now</button>' : ''}<div class="wplay"><i></i>take a pause · play with the water behind</div></div>`; };
+  draw(); W.hidden = false; BGP.on(W);
   const note = t => { const n = $('mxN'); n.textContent = t; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
   W.onclick = async e => {
     if (e.target.closest('[data-x]')) return close();
@@ -1425,23 +1434,28 @@ const TUT = (() => {
   return { start() { if (on) return; on = true; $('coach').hidden = false; go(0); cancelAnimationFrame(raf); raf = requestAnimationFrame(place); }, on: () => on, stop: () => finish(false) };
 })();
 
+const BGP = { n: 0, on(W) { BGP.n++; try { $('home').hidden = false; $('home').classList.add('bgonly'); document.body.classList.add('bgp'); HOMEBG.ensure(false, false); } catch (e) {} if (W._bgp) return; W._bgp = 1; let dn = false; const ok = e => !e.target.closest('button,input,.whl,.idfav,.wblob,.mxtabs');
+    W.addEventListener('pointerdown', e => { if (!ok(e)) return; dn = true; try { HOMEBG.touchPx(e.clientX, e.clientY); } catch (x) {} }, { passive: true });
+    W.addEventListener('pointermove', e => { if (dn || e.pointerType === 'mouse') try { HOMEBG.touchPx(e.clientX, e.clientY); } catch (x) {} }, { passive: true });
+    const up = () => { dn = false; try { HOMEBG.release(); } catch (x) {} }; ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => W.addEventListener(t, up)); },
+  off() { BGP.n = Math.max(0, BGP.n - 1); if (!BGP.n) try { $('home').classList.remove('bgonly'); document.body.classList.remove('bgp'); } catch (e) {} } };
 function openWelcome() {
   const W = $('wel'); if (!W.hidden) return; const st = { name: '', m: 1, d: 1, fav: '' }; const days = m => [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][(m || 1) - 1];
   W.innerHTML = `<div class="wbg"></div>
-  <div class="wstep" data-s="0"><div class="wwm"><div class="wdrop"></div><div class="wrip"></div><div class="wk">welcome to</div><h1>mix.io</h1></div><div class="wsub">mix food-coloring dyes in a glass of water to match colors from all over the world.</div><div class="wtap">tap to begin</div></div>
+  <div class="wstep" data-s="0"><div class="wwm"><div class="wdrop"></div><div class="wrip"></div><div class="wk">welcome to</div><h1>mix.io</h1></div><div class="wsub">mix food-coloring dyes in a glass of water to match colors from all over the world.</div><div class="wplay"><i></i>take a pause · touch the water, it's alive</div><button class="primary wgo wbeg">begin</button></div>
   <div class="wstep" data-s="1"><div class="wk">let's make your color dna</div><h2>what's your name?</h2><div class="wbody"><input id="wName" class="idin" maxlength="24" autocomplete="given-name" placeholder="first name" enterkeyhint="next"></div><button class="primary wgo" id="wG1" disabled>continue</button></div>
   <div class="wstep" data-s="2"><div class="wk" id="wHi">nice to meet you</div><h2>what's your birthday?</h2><div class="wbody"><div class="idbd"><div class="whl" id="wM"></div><div class="whl" id="wD"></div></div></div><button class="primary wgo" id="wG2">continue</button></div>
   <div class="wstep" data-s="3"><div class="wk">last one</div><h2>favorite color?</h2><div class="wbody"><div class="idfav">${IDFAV.map(f => `<button class="idf" data-f="${f[0]}" style="--c:${f[2]}" aria-label="${f[0]}"></button>`).join('')}</div></div><button class="primary wgo" id="wG3" disabled>create my dna</button></div>
   <div class="wstep rev" data-s="4"><div class="wblob" id="wBlob"><div class="wring"></div><div class="wring b"></div></div><div class="wk" id="wMix">mixing your color…</div><h2 id="wYou">this is you.</h2><div class="whex" id="wHex"></div><button class="primary wgo" id="wG4">enter mix.io</button></div>
   <div class="wdots"><i></i><i></i><i></i><i></i></div>`;
-  W.hidden = false; const steps = [...W.querySelectorAll('.wstep')], dots = [...W.querySelectorAll('.wdots i')]; let cur = -1;
+  W.hidden = false; BGP.on(W); const steps = [...W.querySelectorAll('.wstep')], dots = [...W.querySelectorAll('.wdots i')]; let cur = -1;
   const go = i => { if (cur >= 0) { steps[cur].classList.remove('on'); steps[cur].classList.add('gone'); } cur = i; setTimeout(() => steps[i].classList.add('on'), cur ? 260 : 60); dots.forEach((d, k) => d.classList.toggle('on', k === i - 1)); W.querySelector('.wdots').style.opacity = i >= 1 && i <= 3 ? 1 : 0; buzz(4); try { if (i) dialClick(); } catch (e) {} };
   const wheel = (el, items, sel, onPick) => { el.innerHTML = `<div class="wsc">${items.map(t => `<div class="wi">${t}</div>`).join('')}</div><div class="wlens"></div>`; const sc = el.firstChild, its = [...sc.children], IH = 36; let c = -1, raf = 0;
     const paint = () => { raf = 0; const y = sc.scrollTop / IH; its.forEach((it, k) => { const d = k - y, a = clamp(d, -3, 3); it.style.transform = `rotateX(${(-a * 22).toFixed(1)}deg) scale(${(1 - Math.abs(a) * .08).toFixed(3)})`; it.style.opacity = (1 - Math.min(1, Math.abs(d) * .32)).toFixed(3); }); const i = clamp(Math.round(y), 0, items.length - 1); if (i !== c) { c = i; if (el._ready) { buzz(3); try { dialClick(); } catch (x) {} } onPick(i); } };
     let snT = 0, tch = false; const snap = () => { if (tch) return; const k = clamp(Math.round(sc.scrollTop / IH), 0, items.length - 1); if (Math.abs(sc.scrollTop - k * IH) > 2) sc.scrollTo({ top: k * IH, behavior: 'smooth' }); }; sc.addEventListener('touchstart', () => { tch = true; clearTimeout(snT); }, { passive: true }); sc.addEventListener('touchend', () => { tch = false; clearTimeout(snT); snT = setTimeout(snap, 140); }, { passive: true }); sc.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); clearTimeout(snT); snT = setTimeout(snap, 140); }, { passive: true }); its.forEach((it, k) => it.addEventListener('click', () => sc.scrollTo({ top: k * IH, behavior: 'smooth' })));
     requestAnimationFrame(() => { sc.scrollTop = sel * IH; paint(); el._ready = true; }); };
   const fillD = () => { const n = days(st.m); if (st.d > n) st.d = n; $('wD')._ready = false; wheel($('wD'), Array.from({ length: n }, (_, i) => String(i + 1)), st.d - 1, i => st.d = i + 1); };
-  steps[0].addEventListener('click', () => { if (cur !== 0) return; go(1); setTimeout(() => { try { $('wName').focus({ preventScroll: true }); } catch (e) {} }, 700); });
+  steps[0].addEventListener('click', e => { if (cur !== 0 || !e.target.closest('.wwm,.wbeg,h1')) return; go(1); setTimeout(() => { try { $('wName').focus({ preventScroll: true }); } catch (e) {} }, 700); });
   const nm = $('wName'); nm.addEventListener('input', () => $('wG1').disabled = !nm.value.trim()); nm.addEventListener('keydown', e => { if (e.key === 'Enter' && nm.value.trim()) $('wG1').click(); });
   $('wG1').addEventListener('click', () => { st.name = nm.value.trim().slice(0, 24); if (!st.name) return; nm.blur(); $('wHi').textContent = `nice to meet you, ${st.name.toLowerCase()}`; go(2); if (!$('wM').firstChild) { wheel($('wM'), MONTHS, 0, i => { const was = st.m; st.m = i + 1; if (was !== st.m && $('wD').firstChild) fillD(); }); fillD(); } });
   $('wG2').addEventListener('click', () => go(3));
@@ -1450,7 +1464,7 @@ function openWelcome() {
     const S = steps[4], O = $('wBlob'), G = dnaGL(); const c0 = [.82, .86, .9]; if (G) { G.cv.classList.add('dnaorb'); O.insertBefore(G.cv, O.firstChild); DNA.cv = G.cv; DNA.sig = c0.slice(); if (!DNA.raf) DNA.raf = requestAnimationFrame(dnaLoop); }
     setTimeout(() => O.classList.add('in'), 350); const t0 = performance.now() + 700; const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; const tw = () => { const k = clamp((performance.now() - t0) / 2000, 0, 1), e = ease(k); DNA.sig = c0.map((v, i) => v + (c[i] - v) * e); dnaKey = ''; if (k < 1 && !W.hidden) requestAnimationFrame(tw); else DNA.sig = c; }; requestAnimationFrame(tw); setTimeout(() => buzz([6, 60, 6, 60, 6]), 700); setTimeout(() => { O.classList.add('burst'); DNA.pulse = 1; try { dnaBurst(O); } catch (e) {} buzz([10, 30, 16]); try { clink(); } catch (e) {} $('wMix').textContent = 'your color dna'; $('wHex').style.opacity = 1; S.classList.add('done'); }, 2700);
     save.idn = { name: st.name, m: st.m, d: st.d, fav: st.fav }; persist(); dnaKey = ''; applyDNA(); try { HOMEBG.recolor(); } catch (e) {} });
-  $('wG4').addEventListener('click', () => { buzz(8); W.classList.add('out'); try { goTab('home'); } catch (e) {} setTimeout(() => { DNA.sig = idColor(save.idn); W.hidden = true; try { dnaToHome(); } catch (e) {} W.classList.remove('out'); W.innerHTML = ''; toast(`welcome, ${st.name.toLowerCase()} ✦`); setTimeout(ONB.next, 900); }, 900); });
+  $('wG4').addEventListener('click', () => { buzz(8); W.classList.add('out'); try { goTab('home'); } catch (e) {} setTimeout(() => { DNA.sig = idColor(save.idn); W.hidden = true; try { dnaToHome(); } catch (e) {} W.classList.remove('out'); W.innerHTML = ''; BGP.off(); toast(`welcome, ${st.name.toLowerCase()} ✦`); setTimeout(ONB.next, 900); }, 900); });
   go(0);
 }
 function hexToRgb255(h) { h = h.replace('#', ''); return [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16)).join(','); }

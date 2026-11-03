@@ -1159,7 +1159,7 @@ body.bgp #nav,body.bgp .nav{opacity:0!important;pointer-events:none!important;tr
 </div>
 
 <script>
-window.addEventListener('error', e => { try { let b = document.getElementById('errBox'); if (!b) { b = document.createElement('div'); b.id = 'errBox'; b.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#300;color:#fbb;font:11px monospace;padding:8px;border-radius:8px;white-space:pre-wrap'; document.body.appendChild(b); } b.textContent = 'error: ' + e.message + ' @' + e.lineno + ':' + e.colno; } catch (x) {} });
+window.addEventListener('error', e => { try { (window.__errs = window.__errs || []).push(String(e.message).slice(0, 200)); if (!/[?&#]debug/.test(location.href) || /^script error\.?$/i.test(String(e.message || '').trim())) return; let b = document.getElementById('errBox'); if (!b) { b = document.createElement('div'); b.id = 'errBox'; b.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99;background:#300;color:#fbb;font:11px monospace;padding:8px;border-radius:8px;white-space:pre-wrap'; document.body.appendChild(b); } b.textContent = 'error: ' + e.message + ' @' + e.lineno + ':' + e.colno; } catch (x) {} });
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
@@ -3632,7 +3632,7 @@ const ATLAS = (() => {
   let SUN = null, sunT = 0, zSlow = false, EMAT = null, SUNW = null, JOUR = !!save.jline, jT = 0, BEAM = 0, jStart = 0, jFollow = -1, jOrder = null, jSig = '';
   function placeSun() { if (!SUN) return; const d = new Date(), doy = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5), dec = -23.44 * Math.cos(2 * Math.PI / 365 * (doy + 10)), utc = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600; let lng = (12 - utc) * 15; lng = ((lng + 540) % 360) - 180; const [x, y, z] = vec(dec, lng); SUN.position.set(x * 5, y * 5, z * 5); sunT = performance.now(); }
   const GI = (() => { const m = new Map(); ATLAS_DATA.forEach((r, i) => { const key = r[1].toFixed(2) + ',' + r[2].toFixed(2); (m.get(key) || m.set(key, []).get(key)).push(i); }); const o = []; m.forEach((L, key) => L.forEach((i, k) => o[i] = { key, k, n: L.length })); return o; })(); let SPR = 0;
-  function loadThree(cb) { if (window.THREE) return cb(); if (loading) return; loading = true; const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; s.onload = () => { loading = false; cb(); }; s.onerror = () => { loading = false; $('aCount').textContent = 'the globe needs a connection'; }; document.head.appendChild(s); }
+  function loadThree(cb) { if (window.THREE) return cb(); if (loading) return; loading = true; const s = document.createElement('script'); s.crossOrigin = 'anonymous'; s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; s.onload = () => { loading = false; cb(); }; s.onerror = () => { loading = false; $('aCount').textContent = 'the globe needs a connection'; }; document.head.appendChild(s); }
   function init() {
     T = THREE; renderer = new T.WebGLRenderer({ antialias: (devicePixelRatio || 1) < 2, powerPreference: 'low-power' }); renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.6)); renderer.setClearColor(0x000000, 1); renderer.outputEncoding = T.sRGBEncoding;
     view.insertBefore(renderer.domElement, pc); sc3 = new T.Scene(); cam = new T.PerspectiveCamera(FOV, 1, .01, 200);

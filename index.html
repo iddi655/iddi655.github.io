@@ -1027,6 +1027,7 @@ body.bgp #nav,body.bgp .nav{opacity:0!important;pointer-events:none!important;tr
 .wstep h1,.wstep h2,.wstep .wsub,.wstep .wk,.mixa .mxh,.mixa .wsub,.mixa .wk{text-shadow:0 2px 24px rgba(0,0,0,.55)}
 .mxbring{display:block;width:100%;margin-top:14px;padding:14px 16px;border-radius:18px;border:0;text-align:center;color:#fff;background:linear-gradient(180deg,rgba(var(--dna-rgb),.28),rgba(var(--dna-rgb),.1));box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 .5px rgba(var(--dna-rgb),.5),0 10px 30px -14px rgba(var(--dna-rgb),.8)}
 .mxbring b{display:block;font:700 15.5px var(--f-ui)}.mxbring small{display:block;margin-top:3px;font:500 12px var(--f-ui);color:rgba(255,255,255,.65)}
+.dburst .dbf,.dburst .dbr{animation-duration:2.2s!important;animation-timing-function:cubic-bezier(.16,.8,.3,1)!important}.dburst .dbr.r2{animation-delay:.25s!important}.dburst .dbf{opacity:.6}
 </style>
 
 <div id="bootc" style="position:fixed;inset:0;background:#000;z-index:9999;transition:opacity .5s"></div>
@@ -1466,7 +1467,7 @@ function openWelcome() {
   W.querySelectorAll('.idf').forEach(b => b.addEventListener('click', () => { st.fav = b.dataset.f; W.querySelectorAll('.idf').forEach(x => x.classList.toggle('on', x === b)); const f = IDFAV.find(x => x[0] === st.fav); W.style.setProperty('--wc', hexToRgb255(f[2])); $('wG3').disabled = false; buzz(5); }));
   $('wG3').addEventListener('click', () => { if (!st.fav) return; const c = idColor(st), hex = rgbToHex(c).toUpperCase(); W.style.setProperty('--wc', c.map(x => Math.round(clamp(x, 0, 1) * 255)).join(',')); $('wHex').textContent = hex; go(4);
     const S = steps[4], O = $('wBlob'), G = dnaGL(); const c0 = [.82, .86, .9]; if (G) { G.cv.classList.add('dnaorb'); O.insertBefore(G.cv, O.firstChild); DNA.cv = G.cv; DNA.sig = c0.slice(); if (!DNA.raf) DNA.raf = requestAnimationFrame(dnaLoop); }
-    setTimeout(() => O.classList.add('in'), 350); const t0 = performance.now() + 700; const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; const tw = () => { const k = clamp((performance.now() - t0) / 2000, 0, 1), e = ease(k); DNA.sig = c0.map((v, i) => v + (c[i] - v) * e); dnaKey = ''; if (k < 1 && !W.hidden) requestAnimationFrame(tw); else DNA.sig = c; }; requestAnimationFrame(tw); setTimeout(() => buzz([6, 60, 6, 60, 6]), 700); setTimeout(() => { O.classList.add('burst'); DNA.pulse = 1; try { dnaBurst(O); } catch (e) {} buzz([10, 30, 16]); try { clink(); } catch (e) {} $('wMix').textContent = 'your color dna'; $('wHex').style.opacity = 1; S.classList.add('done'); }, 2700);
+    setTimeout(() => O.classList.add('in'), 350); const t0 = performance.now() + 700; const ease = k => k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; const tw = () => { const k = clamp((performance.now() - t0) / 2000, 0, 1), e = ease(k); DNA.sig = c0.map((v, i) => v + (c[i] - v) * e); dnaKey = ''; if (k < 1 && !W.hidden) requestAnimationFrame(tw); else DNA.sig = c; }; requestAnimationFrame(tw); setTimeout(() => buzz([6, 60, 6, 60, 6]), 700); setTimeout(() => { O.classList.add('burst'); DNA.pulseT = 1; try { dnaBurst(O); } catch (e) {} buzz([10, 30, 16]); try { clink(); } catch (e) {} $('wMix').textContent = 'your color dna'; $('wHex').style.opacity = 1; S.classList.add('done'); }, 2700);
     save.idn = { name: st.name, m: st.m, d: st.d, fav: st.fav }; persist(); dnaKey = ''; applyDNA(); try { HOMEBG.recolor(); } catch (e) {} });
   $('wG4').addEventListener('click', () => { buzz(8); if (!SB.signedIn() && !save.acctOffline) { save.acctAsked = 1; save.acctMode = save.acctMode || 'guest'; persist(); openAccountSheet(true); } W.classList.add('out'); try { goTab('home'); } catch (e) {} setTimeout(() => { DNA.sig = idColor(save.idn); W.hidden = true; try { dnaToHome(); } catch (e) {} W.classList.remove('out'); W.innerHTML = ''; BGP.off(); toast(`welcome, ${st.name.toLowerCase()} ✦`); setTimeout(ONB.next, 900); }, 900); });
   go(0);
@@ -3309,49 +3310,57 @@ function dnaRot(ax, ay) { // rotate around screen X by ax and screen Y by ay (wo
 
 function dnaBurst(host) { if (!host) return; const c = DNA.sig || [.6, .8, .9], hx = rgbToHex(c), lt = rgbToHex(c.map(v => Math.min(1, v * .5 + .5))), box = document.createElement('div'); box.className = 'dburst'; host.appendChild(box);
   box.innerHTML = `<i class="dbf" style="--c:${hx}"></i><i class="dbr" style="--c:${lt}"></i><i class="dbr r2" style="--c:${hx}"></i>`;
-  for (let k = 0; k < 22; k++) { const a = Math.random() * Math.PI * 2, d = 95 + Math.random() * 85, z = 3 + Math.random() * 6, sp = document.createElement('b'); sp.className = 'dbd'; sp.style.cssText = `--x:${(Math.cos(a) * d).toFixed(0)}px;--y:${(Math.sin(a) * d).toFixed(0)}px;width:${z.toFixed(1)}px;height:${z.toFixed(1)}px;--c:${Math.random() < .5 ? hx : lt};animation-delay:${(Math.random() * .08).toFixed(2)}s;animation-duration:${(.75 + Math.random() * .5).toFixed(2)}s`; box.appendChild(sp); }
+  for (let k = 0; k < 9; k++) { const a = Math.random() * Math.PI * 2, d = 60 + Math.random() * 55, z = 4 + Math.random() * 7, sp = document.createElement('b'); sp.className = 'dbd'; sp.style.cssText = `--x:${(Math.cos(a) * d).toFixed(0)}px;--y:${(Math.sin(a) * d).toFixed(0)}px;width:${z.toFixed(1)}px;height:${z.toFixed(1)}px;--c:${Math.random() < .5 ? hx : lt};animation-delay:${(Math.random() * .08).toFixed(2)}s;animation-duration:${(1.7 + Math.random() * .9).toFixed(2)}s`; box.appendChild(sp); }
   const amb = host.parentNode && host.parentNode.querySelector('.eamb'); if (amb) { amb.classList.remove('kick'); void amb.offsetWidth; amb.classList.add('kick'); }
   setTimeout(() => box.remove(), 1500); }
 function dnaBind(cv) { if (cv._dnaL) return; cv._dnaL = 1; const pos = e => [e.clientX, e.clientY];
   cv.addEventListener('pointerdown', e => { e.stopPropagation(); DNA.drag = { p: pos(e), t: performance.now(), m: 0 }; DNA.wx = DNA.wy = 0; DNA.press = 1; haptic(4); try { cv.setPointerCapture(e.pointerId); } catch (x) {} });
   cv.addEventListener('pointermove', e => { const d = DNA.drag; if (!d) return; e.stopPropagation(); const p = pos(e), dx = p[0] - d.p[0], dy = p[1] - d.p[1], dt = Math.max(.012, (performance.now() - d.t) / 1000), k = .011; dnaRot(dy * k, dx * k); DNA.wy = DNA.wy * .45 + dx * k / dt * .55; DNA.wx = DNA.wx * .45 + dy * k / dt * .55; const sp = Math.hypot(dx, dy) / dt; DNA.svx += clamp(Math.abs(dx) / dt * .00012, 0, .3) - clamp(Math.abs(dy) / dt * .00006, 0, .15); DNA.svy += clamp(Math.abs(dy) / dt * .00012, 0, .3) - clamp(Math.abs(dx) / dt * .00006, 0, .15); d.m += Math.hypot(dx, dy); d.p = p; d.t = performance.now(); if (sp > 1800 && Math.random() < .2) buzz(3); });
-  const up = e => { const d = DNA.drag; DNA.drag = null; DNA.press = 0; if (d && performance.now() - d.t > 90) { DNA.wx *= .2; DNA.wy *= .2; } if (d && d.m < 6) { DNA.pulse = 1; DNA.svx += .5; DNA.svy -= .4; DNA.ripT = performance.now(); haptic([8, 40, 14, 40, 8]); try { chime(); } catch (x) {} dnaBurst(cv.parentNode); } };
+  const up = e => { const d = DNA.drag; DNA.drag = null; DNA.press = 0; if (d && performance.now() - d.t > 90) { DNA.wx *= .2; DNA.wy *= .2; } if (d && d.m < 6) { DNA.pulseT = 1; DNA.svx += .26; DNA.svy -= .2; DNA.ripT = performance.now(); haptic([8, 40, 14, 40, 8]); try { chime(); } catch (x) {} dnaBurst(cv.parentNode); } };
   cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); }
 
 function dnaGL() { if (DNA.G !== undefined) return DNA.G; DNA.G = null; try {
   const cv = document.createElement('canvas'); cv.className = 'dnaorb'; cv.width = cv.height = 400; const g = cv.getContext('webgl', { premultipliedAlpha: true, alpha: true, antialias: false }); if (!g) return null;
   const VS = 'attribute vec2 p; varying vec2 v; void main(){ v=p; gl_Position=vec4(p,0.,1.); }';
   const FS = `precision highp float; varying vec2 v; uniform float uT; uniform mat3 uR; uniform vec3 uSig; uniform float uAmp; uniform float uSpd; uniform float uPul; uniform vec2 uSq; uniform float uRip;
-float sdf(vec3 q){ q.xy/=(1.+uSq); q.z*=1.+.5*(uSq.x+uSq.y); vec3 p=uR*q; float t=uT*uSpd; float r=length(p); vec3 n=p/max(r,1e-4);
- float d=0.13*sin(2.0*n.x+t*.8)*sin(1.7*n.y+t*.6+1.3)*sin(2.2*n.z+t*.5+.4)*2.0 + 0.07*sin(3.0*n.x+2.0*n.y+t*.4)*cos(2.5*n.z-n.y+t*.3) + 0.035*sin(4.0*n.z+t*1.1+n.x*3.0);
- if(uRip>0.){ d+=.085*sin(n.y*11.+n.x*4.-uRip*17.)*exp(-uRip*2.4)+.05*sin(length(n.xz)*16.-uRip*22.)*exp(-uRip*3.); }
- return (r-(0.92+uPul*.06)-d*uAmp)*0.62; }
-vec3 nrm(vec3 p){ vec2 e=vec2(.0025,-.0025); return normalize(e.xyy*sdf(p+e.xyy)+e.yyx*sdf(p+e.yyx)+e.yxy*sdf(p+e.yxy)+e.xxx*sdf(p+e.xxx)); }
-vec3 env(vec3 d){ vec3 c=vec3(.012,.013,.02)+vec3(.03,.035,.05)*max(d.y,0.);
- c+=vec3(1.0,.72,.34)*2.6*smoothstep(.90,.985,dot(d,normalize(vec3(.35,.85,.45))));
- c+=vec3(1.0,.82,.55)*1.4*smoothstep(.93,.99,dot(d,normalize(vec3(-.8,-.1,.5))));
- c+=vec3(.75,.85,1.0)*1.6*smoothstep(.88,.99,dot(d,normalize(vec3(.6,-.55,.3))));
- c+=vec3(.9,.95,1.)*.5*smoothstep(.15,.0,abs(d.y+.05))*smoothstep(-.2,.6,-d.z);
+float gooE(){ return uRip>0. ? (1.-exp(-uRip*2.6))*exp(-uRip*.95) : 0.; }
+float sdf(vec3 q){ q.xy/=(1.+uSq); q.z*=1.+.5*(uSq.x+uSq.y); vec3 p=uR*q; float t=uT*uSpd*.6; float r=length(p); vec3 n=p/max(r,1e-4);
+ float d=0.12*sin(1.6*n.x+t*.8)*sin(1.4*n.y+t*.6+1.3)*sin(1.8*n.z+t*.5+.4)*2.0 + 0.05*sin(2.4*n.x+1.6*n.y+t*.4)*cos(2.0*n.z-n.y+t*.3);
+ float g=gooE(); if(g>0.){ d+=.075*sin(n.y*5.5+n.x*1.8-uRip*6.5)*g + .045*sin(length(n.xz)*7.-uRip*8.)*g; }
+ return (r-(0.92+uPul*.05)-d*uAmp)*0.62; }
+vec3 nrm(vec3 p){ vec2 e=vec2(.003,-.003); return normalize(e.xyy*sdf(p+e.xyy)+e.yyx*sdf(p+e.yyx)+e.yxy*sdf(p+e.yxy)+e.xxx*sdf(p+e.xxx)); }
+vec3 env(vec3 d){ vec3 c=vec3(.015,.016,.022)+vec3(.05,.055,.07)*max(d.y,0.);
+ c+=vec3(1.,.95,.9)*1.5*smoothstep(.86,.99,dot(d,normalize(vec3(.35,.85,.45))));
+ c+=vec3(.8,.85,1.)*.5*smoothstep(.9,.99,dot(d,normalize(vec3(-.7,.2,.6))));
  return c; }
+float cloud(vec3 p){ float t=uT*.18; return .5+.25*sin(dot(p,vec3(2.1,1.3,-1.7))*1.6+t)+.17*sin(dot(p,vec3(-1.2,2.6,1.1))*2.3-t*1.3)+.08*sin(dot(p,vec3(3.1,-2.2,2.7))*3.4+t*1.7); }
 void main(){ vec3 ro=vec3(0.,0.,4.3), rd=normalize(vec3(v*.62,-1.6)); float t=2.0, md=9.; bool hit=false;
  for(int i=0;i<48;i++){ vec3 p=ro+rd*t; float d=sdf(p); md=min(md,d); if(d<.002){hit=true;break;} t+=d*.9; if(t>6.) break; }
- vec3 col=vec3(0.); float a=0.;
- if(hit){ vec3 p=ro+rd*t, n=nrm(p), vv=-rd; float ndv=clamp(dot(n,vv),0.,1.), fr=.04+.96*pow(1.-ndv,4.);
-  vec3 q=uR*p; float th=.5+.5*sin(dot(q,vec3(2.3,3.1,1.7))+uT*.35*uSpd)+.35*sin(dot(q,vec3(-4.,1.,2.5))-uT*.2);
-  vec3 film=.5+.5*cos(6.2832*(vec3(0.,.33,.67)+th*1.25+ndv*1.6));
-  vec3 rf=reflect(rd,n); vec3 refl=env(rf)*mix(vec3(1.),film*1.5,.8);
-  vec3 tr=refract(rd,n,1./1.33); vec3 bk=env(tr*vec3(-1.,-1.,1.));
-  vec3 inside=bk*.28*mix(vec3(1.),uSig*1.8,.7) + uSig*uSig*(.03+.12*pow(ndv,3.)) + film*mix(vec3(1.),uSig*1.5,.35)*.55*pow(1.-ndv,1.6)*(.4+.6*th) + uSig*.35*pow(1.-ndv,2.5);
-  vec3 L1=normalize(vec3(.35,.85,.45)), L2=normalize(vec3(-.8,-.1,.5)); float sp=pow(max(dot(rf,L1),0.),40.)*2.2+pow(max(dot(rf,L2),0.),30.)*1.1;
-  float rim=pow(1.-ndv,5.); float fl=uRip>0.?exp(-uRip*3.5):0.; col=mix(inside,refl,fr)+vec3(1.,.8,.5)*sp*mix(vec3(1.),film,.3)+vec3(1.,.97,.92)*rim*(1.7+fl*2.2)+film*(.18+fl*.9)*rim+uSig*fl*.35; a=1.; }
- else { float h=exp(-max(md,0.)*9.); col=uSig*h*.35+vec3(1.)*exp(-max(md,0.)*40.)*.18; a=0.; }
- col=1.-exp(-col*1.25); col=pow(col,vec3(.92)); gl_FragColor=vec4(col, max(a, max(col.r,max(col.g,col.b)))); }`;
+ vec3 col=vec3(0.); float a=0.; vec3 S=clamp(uSig,0.,1.); float lum=dot(S,vec3(.3,.55,.15)); vec3 rich=clamp(mix(vec3(lum),S,1.25),0.,1.);
+ if(hit){ vec3 p=ro+rd*t, n=nrm(p), vv=-rd; float ndv=clamp(dot(n,vv),0.,1.), fr=.025+.5*pow(1.-ndv,3.2);
+  vec3 L1=normalize(vec3(.35,.85,.45));
+  // cloudy jelly body: march a few steps inside the blob
+  vec3 tr=refract(rd,n,1./1.25); float acc=0., wt=0.; vec3 q=uR*p;
+  for(int k=0;k<6;k++){ vec3 s=q+(uR*tr)*(float(k)*.16+.05); float dn=cloud(s); float w=exp(-float(k)*.35); acc+=dn*w; wt+=w; }
+  acc/=wt; float depth=pow(ndv,1.2);
+  vec3 deep=rich*rich*.22, mid=rich*.85, milk=mix(rich,vec3(1.),.5);
+  vec3 body=mix(deep,mid,smoothstep(.15,.85,depth));
+  body=mix(body,milk,smoothstep(.45,.9,acc)*.7*(.35+.65*depth));
+  body*= .62+.6*acc;
+  float wrap=.55+.45*dot(n,L1); body*= .7+.45*wrap;
+  vec3 sss=rich*pow(1.-ndv,2.6)*.3*(.6+.4*wrap);
+  vec3 rf=reflect(rd,n); vec3 refl=env(rf)*mix(vec3(1.),rich*1.2+.2,.35);
+  float sp=pow(max(dot(rf,L1),0.),22.)*.55+pow(max(dot(rf,L1),0.),110.)*.9;
+  float g=gooE();
+  col=mix(body+sss,refl,fr)+vec3(1.,.98,.95)*sp+rich*pow(1.-ndv,4.)*(.22+g*.4)+rich*g*.12; a=1.; }
+ else { float h=exp(-max(md,0.)*8.); col=rich*h*.26; a=0.; }
+ col=1.-exp(-col*1.35); col=pow(col,vec3(.95)); gl_FragColor=vec4(col, max(a, max(col.r,max(col.g,col.b)))); }`;
   const mk = (ty, src) => { const sh = g.createShader(ty); g.shaderSource(sh, src); g.compileShader(sh); if (!g.getShaderParameter(sh, g.COMPILE_STATUS)) throw new Error(g.getShaderInfoLog(sh)); return sh; };
   const pr = g.createProgram(); g.attachShader(pr, mk(g.VERTEX_SHADER, VS)); g.attachShader(pr, mk(g.FRAGMENT_SHADER, FS)); g.linkProgram(pr); if (!g.getProgramParameter(pr, g.LINK_STATUS)) throw new Error('link'); g.useProgram(pr);
   const b = g.createBuffer(); g.bindBuffer(g.ARRAY_BUFFER, b); g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), g.STATIC_DRAW); const loc = g.getAttribLocation(pr, 'p'); g.enableVertexAttribArray(loc); g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
   const U = n => g.getUniformLocation(pr, n), u = { T: U('uT'), R: U('uR'), S: U('uSig'), A: U('uAmp'), P: U('uSpd'), L: U('uPul'), Q: U('uSq'), W: U('uRip') };
   DNA.G = { cv, draw(t) { g.viewport(0, 0, cv.width, cv.height); g.clearColor(0, 0, 0, 0); g.clear(g.COLOR_BUFFER_BIT);
-    g.uniform1f(u.T, t); const M = DNA.M; g.uniformMatrix3fv(u.R, false, new Float32Array([M[0], M[3], M[6], M[1], M[4], M[7], M[2], M[5], M[8]])); g.uniform2f(u.Q, DNA.sqx || 0, DNA.sqy || 0); { const rt = DNA.ripT ? (performance.now() - DNA.ripT) / 1000 : -1; g.uniform1f(u.W, rt > 0 && rt < 3 ? rt : -1); } const sg = DNA.sig || [.78, .8, .84]; g.uniform3f(u.S, sg[0], sg[1], sg[2]); g.uniform1f(u.A, .45 + .35 * Math.min(1.4, DNA.energy || 1) + DNA.pulse * .8); g.uniform1f(u.P, DNA.speed || 1); g.uniform1f(u.L, DNA.pulse); g.drawArrays(g.TRIANGLES, 0, 3); } };
+    g.uniform1f(u.T, t); const M = DNA.M; g.uniformMatrix3fv(u.R, false, new Float32Array([M[0], M[3], M[6], M[1], M[4], M[7], M[2], M[5], M[8]])); g.uniform2f(u.Q, DNA.sqx || 0, DNA.sqy || 0); { const rt = DNA.ripT ? (performance.now() - DNA.ripT) / 1000 : -1; g.uniform1f(u.W, rt > 0 && rt < 5 ? rt : -1); } const sg = DNA.sig || [.78, .8, .84]; g.uniform3f(u.S, sg[0], sg[1], sg[2]); g.uniform1f(u.A, .42 + .3 * Math.min(1.4, DNA.energy || 1) + DNA.pulse * .5); g.uniform1f(u.P, DNA.speed || 1); g.uniform1f(u.L, DNA.pulse); g.drawArrays(g.TRIANGLES, 0, 3); } };
   dnaBind(cv); return DNA.G; } catch (e) { console.warn('[mix.io] dna gl', e); DNA.G = null; return null; } }
 function renderDNA() {
   const el = $('dna'); if (!el) return; const dc = save.dyeCount || {}, H = save.dnaHist || [], at = Object.values(dc).reduce((a, b) => a + b, 0), rc = {}; H.forEach(g => Object.entries(g.d).forEach(([k, v]) => rc[k] = (rc[k] || 0) + v)); const rt = Object.values(rc).reduce((a, b) => a + b, 0);
@@ -3378,9 +3387,9 @@ function dnaLoop(now) {
   DNA.raf = 0; const cv = DNA.cv; if (!cv || !cv.isConnected || ((($('settings').hidden) || !$('settings').contains(cv)) && ($('home').hidden || !$('hBlob').contains(cv)) && !($('wBlob') && $('wBlob').contains(cv))) || document.hidden) return; DNA.raf = requestAnimationFrame(dnaLoop);
   const x = DNA.G && cv === DNA.G.cv ? null : cv.getContext('2d'), N = cv.width, c = N / 2, R = N * .33, t = now / 1000, red = matchMedia('(prefers-reduced-motion: reduce)').matches, dt = Math.min(.05, DNA.lt ? (now - DNA.lt) / 1000 : .016); DNA.lt = now;
   if (!DNA.drag) { DNA.wy += ((red ? 0 : .22) - DNA.wy) * (1 - Math.exp(-dt * .9)); DNA.wx += (0 - DNA.wx) * (1 - Math.exp(-dt * 1.1)); dnaRot(clamp(DNA.wx, -14, 14) * dt, clamp(DNA.wy, -14, 14) * dt); DNA.yaw += DNA.wy * dt; }
-  { const tx = DNA.press * .1, ty = -DNA.press * .08; for (const [a, v] of [['sqx', 'svx'], ['sqy', 'svy']]) { const tg = a === 'sqx' ? tx : ty, acc = (tg - DNA[a]) * 170 - DNA[v] * 9; DNA[v] += acc * dt; DNA[a] += DNA[v] * dt; DNA[a] = clamp(DNA[a], -.3, .35); } }
-  DNA.pulse *= Math.exp(-dt * 2.2);
-  if (DNA.G && cv === DNA.G.cv) { const busy = DNA.drag || DNA.pulse > .02 || Math.abs(DNA.sqx) + Math.abs(DNA.sqy) + Math.abs(DNA.svx) + Math.abs(DNA.svy) > .01 || (DNA.ripT && now - DNA.ripT < 3000) || Math.abs(DNA.wx) + Math.abs(DNA.wy) > .6; if (!busy && DNA.ld && now - DNA.ld < 32) return; DNA.ld = now; DNA.G.draw(red ? 0 : t); return; }
+  { const tx = DNA.press * .1, ty = -DNA.press * .08; for (const [a, v] of [['sqx', 'svx'], ['sqy', 'svy']]) { const tg = a === 'sqx' ? tx : ty, acc = (tg - DNA[a]) * 62 - DNA[v] * 4.2; DNA[v] += acc * dt; DNA[a] += DNA[v] * dt; DNA[a] = clamp(DNA[a], -.3, .35); } }
+  if (DNA.pulseT) { DNA.pulse += (DNA.pulseT - DNA.pulse) * (1 - Math.exp(-dt * 5)); if (DNA.pulse > .9 * DNA.pulseT) DNA.pulseT = 0; } else DNA.pulse *= Math.exp(-dt * 1.15);
+  if (DNA.G && cv === DNA.G.cv) { const busy = DNA.drag || DNA.pulse > .02 || Math.abs(DNA.sqx) + Math.abs(DNA.sqy) + Math.abs(DNA.svx) + Math.abs(DNA.svy) > .01 || (DNA.ripT && now - DNA.ripT < 5000) || Math.abs(DNA.wx) + Math.abs(DNA.wy) > .6; if (!busy && DNA.ld && now - DNA.ld < 32) return; DNA.ld = now; DNA.G.draw(red ? 0 : t); return; }
   x.clearRect(0, 0, N, N); x.globalCompositeOperation = 'source-over';
   const EN = DNA.energy || 1, SPD = DNA.speed || 1, pul = 1 + (red ? 0 : .04 * Math.sin(t * 1.3 * SPD)) + DNA.pulse * .25;
   x.globalCompositeOperation = 'lighter';

@@ -1300,7 +1300,7 @@ function makeTarget(level) {
 }
 
 /* ================= Persisted progress ================= */
-const PROFILE = (() => { try { if (/[#&]mx=/.test(location.hash)) localStorage.setItem('mixio.profile', 'main'); const p = localStorage.getItem('mixio.profile') === 'main' ? 'main' : 'demo'; if (p === 'demo') { ['mixio.demo', 'mixio.demo.best', 'mixio.sb.demo'].forEach(k => localStorage.removeItem(k)); } return p; } catch (e) { return 'demo'; } })(); const KEY = PROFILE === 'demo' ? 'mixio.demo' : 'mixio.v1';
+const PROFILE = (() => { try { if (/[#&]mx=/.test(location.hash)) localStorage.setItem('mixio.profile', 'main'); const p = localStorage.getItem('mixio.profile') === 'main' ? 'main' : 'demo'; if (p === 'demo') { let signed = false; try { const sb = JSON.parse(localStorage.getItem('mixio.sb.demo') || 'null'); signed = !!(sb && sb.refresh_token && sb.user && !sb.user.anon); } catch (e) {} if (!signed) ['mixio.demo', 'mixio.demo.best', 'mixio.sb.demo'].forEach(k => localStorage.removeItem(k)); } return p; } catch (e) { return 'demo'; } })(); const KEY = PROFILE === 'demo' ? 'mixio.demo' : 'mixio.v1';
 function recount50() { try { const have = new Set((save.palette || []).map(p => p.n)); (save.flown || []).forEach(n => { if (have.has(n)) return; const c = COLORS.find(c => c[0] === n); if (!c) return; save.palette.push({ n, h: rgbToHex(displayColor(recipeA(c[1], c[2]))), p: 50, d: Date.now() }); }); } catch (e) {} }
 let save = { level: 1, coins: 0, muted: false, haptics: true, cb: false, bg: 'black', glass: 'tumbler', owned: ['black', 'white', 'tumbler'], stats: { sum: 0, n: 0, perfects: 0, mixed: 0, streak: 0, lastDay: '' }, palette: [] };
 try {

@@ -1037,6 +1037,48 @@ body.bgp .hbg{filter:brightness(.6) saturate(.9)}
 .ov.atlas{padding-top:0}
 .rksheet .rkpanel,.idsheet .rkpanel{max-height:calc(86% - env(safe-area-inset-top,0px))}
 @media (max-height:700px){.home{padding-top:calc(env(safe-area-inset-top,0px) + 40px)!important}.hring{margin-top:0!important}}
+
+/* studio: float tabs */
+.tabin{animation:tabFloat .46s cubic-bezier(.2,.9,.25,1.05) both!important}
+@keyframes tabFloat{0%{opacity:0;transform:translate3d(0,14px,0) scale(.985)}100%{opacity:1;transform:none}}
+#home.tabin>*:not(.hbg){animation:tabFloat .5s cubic-bezier(.2,.9,.25,1.05) both}
+#home.tabin{animation:none!important}
+/* studio: liquid lock-it-in */
+#checkBtn{isolation:isolate}
+#checkBtn::before{content:"";position:absolute;left:-6%;right:-6%;bottom:-30%;height:calc(var(--p,0) * 130% + 0%);z-index:-1;border-radius:46% 54% 0 0/18px 22px 0 0;background:linear-gradient(180deg,rgba(var(--dna-rgb),.65),rgba(var(--dna-rgb),.28));box-shadow:inset 0 2px 0 rgba(255,255,255,.35);pointer-events:none;animation:lqWob 1.1s ease-in-out infinite alternate;opacity:calc(var(--p,0) * 4)}
+@keyframes lqWob{0%{border-radius:42% 58% 0 0/16px 24px 0 0}100%{border-radius:58% 42% 0 0/24px 16px 0 0}}
+#checkBtn::after{opacity:0!important}
+#checkBtn.locked{animation:lqSquish .6s cubic-bezier(.3,1.6,.45,1)}
+@keyframes lqSquish{0%{transform:scale(1.04,.9)}45%{transform:scale(.97,1.04)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){#checkBtn::before{animation:none}}
+.dwb{margin-top:6px;font:600 13px var(--f-ui);color:rgba(220,240,255,.75)}.dwb b{color:#fff}
+.mxdel{margin-top:22px;border:0;background:none;color:#ff7a7a;font:600 12.5px var(--f-ui);opacity:.8;padding:8px}
+.mxdelc{margin-top:10px;padding:14px;border-radius:16px;background:rgba(255,80,80,.08);box-shadow:inset 0 0 0 .5px rgba(255,120,120,.35);font:500 13px/1.4 var(--f-ui);color:#ffd0d0}
+.mxdelc .row2{display:flex;gap:8px;justify-content:center;margin-top:10px}.mxdelc button{border:0;border-radius:12px;padding:9px 14px;font:700 13px var(--f-ui)}.mxdelc .yes{background:#ff5a5a;color:#fff}.mxdelc .no{background:rgba(255,255,255,.08);color:#fff}
+
+/* studio: travel journal */
+.duo.solo{grid-template-columns:1fr!important}
+.jr{margin-top:14px;padding:16px 14px 12px;border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 .5px rgba(255,255,255,.08)}
+.jrh{display:flex;flex-direction:column;gap:2px;margin:0 2px 6px}.jrh b{font:800 20px var(--f-display);letter-spacing:-.02em}.jrh small{color:var(--muted);font-size:12.5px}
+.jtabs{position:relative;display:grid;grid-template-columns:repeat(4,1fr);margin:12px 0 12px;padding:4px;border-radius:16px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.1)}
+.jtabs button{position:relative;z-index:1;height:34px;border:0;background:none;color:rgba(255,255,255,.55);font:700 12.5px var(--f-ui);transition:color .3s}
+.jtabs button.on{color:#fff}
+.jtk{position:absolute;left:4px;top:4px;bottom:4px;width:calc((100% - 8px) / 4);border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.06));box-shadow:inset 0 1px 0 rgba(255,255,255,.28);transform:translateX(calc(var(--ji,0) * 100%));transition:transform .5s cubic-bezier(.3,1.35,.45,1)}
+.jpc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.jcard{position:relative;display:flex;flex-direction:column;gap:8px;padding:8px 8px 10px;border:0;border-radius:16px;text-align:left;color:#fff;background:#f3eee2;box-shadow:0 10px 24px -14px rgba(0,0,0,.8);transform:rotate(calc((var(--r,0) - .5) * 2deg));animation:tabFloat .5s var(--d,0ms) cubic-bezier(.2,.9,.25,1.05) both}
+.jcard:nth-child(odd){--r:.2}.jcard:nth-child(even){--r:.8}
+.jcard:active{transform:scale(.97)}
+.jink{position:relative;height:64px;border-radius:10px;overflow:hidden;background:var(--t)}
+.jink i{position:absolute;inset:0;background:var(--m);clip-path:polygon(0 62%,12% 58%,26% 64%,40% 57%,55% 63%,70% 56%,85% 62%,100% 57%,100% 100%,0 100%);animation:jPour 1.1s calc(var(--d,0ms) + 200ms) cubic-bezier(.3,.8,.3,1) both}
+@keyframes jPour{from{transform:translateY(100%)}}
+.jtx{display:flex;flex-direction:column;min-width:0;padding:0 2px}.jtx b{font:700 13px/1.2 var(--f-ui);color:#1b1e23;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.jtx small{font:500 11px var(--f-ui);color:#6b6f76;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jpct{position:absolute;top:12px;right:12px;font:700 11px var(--f-ui);padding:3px 7px;border-radius:999px;background:rgba(0,0,0,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.jmore{grid-column:1/-1;margin-top:4px;height:40px;border:0;border-radius:14px;color:#fff;font:700 13px var(--f-ui);background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12)}
+.jst{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.jstamp{display:flex;align-items:center;gap:6px;padding:5px 9px 5px 5px;border-radius:999px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12)}
+.jstamp img{width:20px;height:14px;border-radius:3px;object-fit:cover}.jstamp em{font:600 11.5px var(--f-ui);font-style:normal;color:rgba(255,255,255,.8)}
+.jempty{grid-column:1/-1;padding:16px;text-align:center;color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:reduce){.jcard,.jink i{animation:none}}
 </style>
 
 <div id="bootc" style="position:fixed;inset:0;background:#000;z-index:9999;transition:opacity .5s"></div>
@@ -1136,7 +1178,7 @@ body.bgp .hbg{filter:brightness(.6) saturate(.9)}
   </div>
 
   <div class="rksheet" id="setSheet" hidden><div class="rkpanel setpanel"><div class="rkh"><div><b class="seth">settings</b></div><button class="rkx" id="setClose" aria-label="Close">×</button></div>
-                <button class="tog favtog idsetbtn" id="acSet"><span>account</span><span class="idsetv" id="acSetV">guest ›</span></button><button class="tog favtog idsetbtn" id="idSet"><span>color dna</span><span class="idsetv">edit ›</span></button><button class="tog favtog idsetbtn" id="siteSet"><span>play on mix.io website</span><span class="idsetv">bring my save ›</span></button><button class="tog favtog idsetbtn" id="demoSet"><span id="demoT">my saved game</span><span class="idsetv" id="demoV">load ›</span></button><button class="tog favtog idsetbtn" id="tutSet"><span>how to play</span><span class="idsetv">replay tutorial ›</span></button><div class="favrow" id="favRow" hidden></div>
+                <button class="tog favtog idsetbtn" id="acSet"><span>account</span><span class="idsetv" id="acSetV">sign in ›</span></button><button class="tog favtog idsetbtn" id="idSet"><span>color dna</span><span class="idsetv">edit ›</span></button><button class="tog favtog idsetbtn" id="siteSet"><span>play on mix.io website</span><span class="idsetv">bring my save ›</span></button><button class="tog favtog idsetbtn" id="demoSet"><span id="demoT">my saved game</span><span class="idsetv" id="demoV">load ›</span></button><button class="tog favtog idsetbtn" id="tutSet"><span>how to play</span><span class="idsetv">replay tutorial ›</span></button><div class="favrow" id="favRow" hidden></div>
         <div class="tog"><span>sound</span><button class="sw" id="tSound" role="switch" aria-label="Sound"></button></div>
         <div class="tog"><span>haptics</span><button class="sw" id="tHap" role="switch" aria-label="Haptics"></button></div>
         <div class="tog"><span>color-blind mode<br><small style="color:var(--muted)">shows hex and ΔE on the target</small></span><button class="sw" id="tCB" role="switch" aria-label="Color-blind mode"></button></div>
@@ -1154,15 +1196,18 @@ body.bgp .hbg{filter:brightness(.6) saturate(.9)}
       <div class="row ov-body"><div class="in">
         <div class="ering" id="eRing"><canvas id="eRingC"></canvas><div class="eamb" id="eAmb"><i class="ear"></i><i class="eab a1"></i><i class="eab a2"></i><i class="eab a3"></i><i class="ehalo"></i><div class="emotes"><b style="--x:18%;--y:30%;--d:9s;--s:3px;animation-delay:-1s"></b><b style="--x:78%;--y:22%;--d:11s;--s:2px;animation-delay:-4s"></b><b style="--x:64%;--y:80%;--d:10s;--s:2.5px;animation-delay:-2s"></b><b style="--x:26%;--y:72%;--d:12s;--s:2px;animation-delay:-6s"></b><b style="--x:50%;--y:12%;--d:8s;--s:1.6px;animation-delay:-3s"></b><b style="--x:88%;--y:58%;--d:13s;--s:2px;animation-delay:-7s"></b><b style="--x:10%;--y:52%;--d:9.5s;--s:1.8px;animation-delay:-5s"></b><b style="--x:40%;--y:88%;--d:11s;--s:2.2px;animation-delay:-8s"></b><b style="--x:72%;--y:40%;--d:14s;--s:1.4px;animation-delay:-2.5s"></b><b style="--x:34%;--y:20%;--d:10s;--s:1.5px;animation-delay:-9s"></b></div></div><div class="eblob" id="eBlob"></div><div class="ectr"><div class="eyenum" id="eNum">1000</div><div class="eyerank" id="eRank" hidden></div><div class="eyebest" id="eBest"></div></div><div class="etip" id="eTip" hidden><i></i><span></span></div></div><div class="eleg" id="eLeg"></div><div class="eage" id="eAge"></div>
         <div class="dna" id="dna"></div>
-        <div class="duo"><button class="rkrow pprow" id="ppRow"></button><button class="rkrow" id="rkRow"></button></div>
+        <div class="duo solo"><button class="rkrow" id="rkRow"></button></div>
         <dl class="stats s3">
           <div class="stat2"><dt>perfects</dt><dd id="sPerf">0</dd></div>
           <div class="stat2"><dt>average</dt><dd id="sAvg">–</dd></div>
-          <div class="stat2"><dt>best streak</dt><dd id="sStreak">0</dd></div>
+          <div class="stat2"><dt>days played</dt><dd id="sStreak">0</dd></div>
         </dl>
-        <div class="sec" id="palCount"></div>
-        <div class="ppsec" style="margin:8px 2px 2px">badges</div><div class="brow" id="bRow"></div><div class="binfo" id="bInfo"></div>
-        <div class="gal" id="pal"></div>
+        <div class="jr" id="jr"><div class="jrh"><b>travel journal</b><small>everywhere your colors have taken you</small></div><div class="sec" id="palCount"></div>
+        <div class="jtabs" id="jTabs" role="tablist"><button data-p="pc" class="on">postcards</button><button data-p="st">stamps</button><button data-p="bd">badges</button><button data-p="cl">sets</button><i class="jtk"></i></div>
+        <div class="jpg" data-p="pc"><div class="jpc" id="jPc"></div></div>
+        <div class="jpg" data-p="st" hidden><button class="rkrow pprow" id="ppRow"></button><div class="jst" id="jSt"></div></div>
+        <div class="jpg" data-p="bd" hidden><div class="brow" id="bRow"></div><div class="binfo" id="bInfo"></div></div>
+        <div class="jpg" data-p="cl" hidden><div class="gal" id="pal"></div></div></div>
       </div></div>
     </div>
   </div>
@@ -1277,9 +1322,8 @@ function recipeA(recipe, dil) {
 }
 const FIRST = [['hot pink', [[4, 2]]], ['canary', [[0, 3]]], ['royal blue', [[7, 2]]]];
 function dailyTarget(day) {
-  const d = new Date(), key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  let h = 7; for (const ch of key) h = Math.imul(31, h) + ch.charCodeAt(0) | 0;
-  const rnd = mulberry32(h), idx = Math.floor(rnd() * (key < '2026-11-03' ? 193 : COLORS.length)), c = COLORS[idx];
+  const key = 'utc-' + day; let h = 7; for (const ch of key) h = Math.imul(31, h) + ch.charCodeAt(0) | 0;
+  const rnd = mulberry32(h); let idx = Math.floor(rnd() * COLORS.length); for (let k = 0; k < 400 && xTier(COLORS[idx]) > 2; k++) idx = Math.floor(rnd() * COLORS.length); const c = COLORS[idx];
   const recipe = c[1].map(([i, k]) => ({ i, n: k })), A = recipeA(c[1], c[2]);
   return { A, rgb: displayColor(A), recipe, dil: c[2], drops: recipe.reduce((s, r) => s + r.n, 0), name: c[0], tier: xTier(c), idx };
 }
@@ -1289,6 +1333,7 @@ function bagNext(level) {
   const N = COLORS.length, first = FIRST[0][0], played = new Set(save.played);
   if (!save.seed) { save.seed = (crypto && crypto.getRandomValues ? crypto.getRandomValues(new Uint32Array(1))[0] : Math.floor(Math.random() * 4294967296)) >>> 0 || 1; save.op = 0; }
   const perm = () => { if (bagNext._s === save.seed && bagNext._p) return bagNext._p; let a = save.seed >>> 0; const r = () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; const P = Array.from({ length: N }, (_, i) => i); for (let i = N - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); const t = P[i]; P[i] = P[j]; P[j] = t; } bagNext._s = save.seed; bagNext._p = P; return P; };
+  { const rq = save.retry || []; for (let r = 0; r < rq.length; r++) if (rq[r].at <= level && COLORS[rq[r].i]) { const it = rq.splice(r, 1)[0]; save.retry = rq; save.retryNow = COLORS[it.i][0]; return it.i; } }
   for (let lap = 0; lap < 2; lap++) { const P = perm(); while ((save.op || 0) < N) { const i = P[save.op++]; if (!played.has(i) && COLORS[i][0] !== first) { save.played.push(i); return i; } }
     save.played = []; played.clear(); save.seed = ((save.seed * 1103515245 + 12345) >>> 0) || 7; save.op = 0; }
   return Math.floor(Math.random() * N);
@@ -1310,7 +1355,7 @@ function makeTarget(level) {
 }
 
 /* ================= Persisted progress ================= */
-const PROFILE = (() => { try { if (/[#&]mx=/.test(location.hash)) localStorage.setItem('mixio.profile', 'main'); const p = localStorage.getItem('mixio.profile') === 'main' ? 'main' : 'demo'; if (p === 'demo') { let signed = false; try { const sb = JSON.parse(localStorage.getItem('mixio.sb.demo') || 'null'); signed = !!(sb && sb.refresh_token && sb.user && !sb.user.anon); } catch (e) {} if (!signed) ['mixio.demo', 'mixio.demo.best', 'mixio.sb.demo'].forEach(k => localStorage.removeItem(k)); } return p; } catch (e) { return 'demo'; } })(); const KEY = PROFILE === 'demo' ? 'mixio.demo' : 'mixio.v1';
+const PROFILE = (() => { try { if (/[#&]mx=/.test(location.hash)) localStorage.setItem('mixio.profile', 'main'); const p = localStorage.getItem('mixio.profile') === 'main' ? 'main' : 'demo'; if (p === 'demo') { let signed = false; try { const sb = JSON.parse(localStorage.getItem('mixio.sb.demo') || 'null'); signed = !!(sb && sb.refresh_token && sb.user && !sb.user.anon); } catch (e) {} let played = false; try { const d = JSON.parse(localStorage.getItem('mixio.demo') || 'null'); played = !!(d && ((d.level || 1) > 1 || d.acctOffline)); } catch (e) {} if (!signed && !played) ['mixio.demo', 'mixio.demo.best', 'mixio.sb.demo'].forEach(k => localStorage.removeItem(k)); } return p; } catch (e) { return 'demo'; } })(); const KEY = PROFILE === 'demo' ? 'mixio.demo' : 'mixio.v1';
 function recount50() { try { const have = new Set((save.palette || []).map(p => p.n)); (save.flown || []).forEach(n => { if (have.has(n)) return; const c = COLORS.find(c => c[0] === n); if (!c) return; save.palette.push({ n, h: rgbToHex(displayColor(recipeA(c[1], c[2]))), p: 50, d: Date.now() }); }); } catch (e) {} }
 let save = { level: 1, coins: 0, muted: false, haptics: true, cb: false, bg: 'black', glass: 'tumbler', owned: ['black', 'white', 'tumbler'], stats: { sum: 0, n: 0, perfects: 0, mixed: 0, streak: 0, lastDay: '' }, palette: [] };
 try {
@@ -1344,7 +1389,7 @@ const SB = (() => {
   const req = async (path, { method = 'GET', body, auth = true, headers = {}, raw = false } = {}) => {
     if (!ON) throw new Error('off'); const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), 9000);
     try { const h = Object.assign({ apikey: KEY0, 'Content-Type': 'application/json' }, headers); if (auth && sess && sess.access_token) h.Authorization = 'Bearer ' + sess.access_token;
-      const r = await fetch(URL0 + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal }); if (raw) return r;
+      const r = await fetch(URL0 + path, { method, headers: h, body: body ? JSON.stringify(body) : undefined, signal: ctl.signal, keepalive: !!(body && JSON.stringify(body).length < 60000) }); if (raw) return r;
       const t = await r.text(); let j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) { const er = new Error((j && (j.msg || j.message || j.error_description || j.error)) || ('http ' + r.status)); er.status = r.status; throw er; } return j; } finally { clearTimeout(tm); } };
   const setSess = j => { if (!j || !j.access_token) return false; sess = { access_token: j.access_token, refresh_token: j.refresh_token, exp: Date.now() + (j.expires_in || 3600) * 1000 - 60000, user: j.user ? { id: j.user.id, email: j.user.email || '', anon: !!j.user.is_anonymous } : (sess && sess.user) }; keep(); return true; };
   const fresh = async () => { if (!sess) return false; if (Date.now() < (sess.exp || 0)) return true; try { return setSess(await req('/auth/v1/token?grant_type=refresh_token', { method: 'POST', auth: false, body: { refresh_token: sess.refresh_token } })); } catch (e) { if (e.status === 400 || e.status === 401) { sess = null; keep(); } return false; } };
@@ -1372,6 +1417,9 @@ const SB = (() => {
     async create(u, pw) { const j = await req('/auth/v1/signup', { method: 'POST', auth: false, body: { email: SB.mail(u), password: pw, data: { username: u } } }); if (!j || !j.access_token) { const e = new Error(j && j.id ? 'confirm' : 'failed'); throw e; } setSess(j); sess.user.uname = u; keep(); return SB.after(); },
     async login(u, pw) { const j = await req('/auth/v1/token?grant_type=password', { method: 'POST', auth: false, body: { email: SB.mail(u), password: pw } }); setSess(j); sess.user.uname = u; keep(); return SB.after(); },
     async after() { save.acct = { id: uid(), name: SB.uname(), p: 'pw', t: Date.now() }; save.acctMode = 'account'; save.acctOffline = 0; const adopted = await pull(); save.acct.name = SB.uname(); persist(); await push(true); SB.myRank().catch(() => {}); return adopted; },
+    async postDaily(day, pct) { if (!uid() || SB.isAnon()) return null; if (!(await fresh())) return null; try { await req('/rest/v1/daily_scores', { method: 'POST', headers: { Prefer: 'return=minimal' }, body: { user_id: uid(), day, pct: clamp(Math.round(pct * 10) / 10, 0, 100) } }); } catch (e) { if (e.status !== 409) throw e; } return SB.dailyRank(day, pct); },
+    async dailyRank(day, pct) { const j = await req('/rest/v1/rpc/daily_rank', { method: 'POST', auth: false, body: { d: day, p: pct } }); return j; },
+    async deleteMe() { if (!(await fresh())) throw new Error('not signed in'); await req('/rest/v1/rpc/delete_my_account', { method: 'POST', body: {} }); sess = null; keep(); },
     async anon() { if (sess) return true; const j = await req('/auth/v1/signup', { method: 'POST', auth: false, body: { data: {} } }); return setSess(j); },
     isAnon: () => !!(sess && sess.user && sess.user.anon),
     boot() { if (!ON) return; if (!sess) { return; SB.anon().then(ok => { if (ok) { save.acct = { id: uid(), name: (save.idn && save.idn.name) || '', p: 'auto', t: Date.now() }; persist(); push(true); SB.myRank().catch(() => {}); } }).catch(() => {}); return; } fresh().then(ok => { if (!ok) return; pull().then(() => { push(true); SB.myRank().then(() => { try { checkBadges(-1); } catch (e) {} }).catch(() => {}); }); }).catch(() => {}); }
@@ -1388,8 +1436,8 @@ const ACCOUNT = {
 function openAccountSheet(first, why) {
   const W = $('mixAuth'); if (!W.hidden) return; const si = SB.signedIn() && !SB.isAnon();
   const close = () => { W.classList.add('out'); setTimeout(() => { W.hidden = true; W.classList.remove('out'); W.innerHTML = ''; BGP.off(); if (first) setTimeout(ONB.next, 300); }, 600); };
-  if (si) { W.innerHTML = `<div class="wbg"></div><button class="mxx" data-x="1" aria-label="Close">×</button><div class="mxin"><div class="wk">you're in the mix</div><h2>${SB.uname().toLowerCase()}</h2><div class="wsub">your progress is saved to your account and you're on the world leaderboard.</div><button class="primary wgo" data-x="1">back to mixing</button><button class="mxlink" data-out="1">sign out</button></div>`;
-    W.hidden = false; BGP.on(W); W.onclick = e => { if (e.target.closest('[data-out]')) { ACCOUNT.signOut(); buzz(5); renderAcSet(); toast('signed out'); close(); } else if (e.target.closest('[data-x]')) close(); }; return; }
+  if (si) { W.innerHTML = `<div class="wbg"></div><button class="mxx" data-x="1" aria-label="Close">×</button><div class="mxin"><div class="wk">you're in the mix</div><h2>${SB.uname().toLowerCase()}</h2><div class="wsub">your progress is saved to your account and you're on the world leaderboard.</div><button class="primary wgo" data-x="1">back to mixing</button><button class="mxlink" data-out="1">sign out</button><button class="mxdel" data-del="1">delete my account</button><div id="mxDelC"></div></div>`;
+    W.hidden = false; BGP.on(W); W.onclick = async e => { if (e.target.closest('[data-del]')) { $('mxDelC').innerHTML = `<div class="mxdelc">this permanently deletes your account, your cloud save and your leaderboard spot. it can't be undone.<div class="row2"><button class="no" data-delno="1">keep it</button><button class="yes" data-delyes="1">delete forever</button></div></div>`; return; } if (e.target.closest('[data-delno]')) { $('mxDelC').innerHTML = ''; return; } if (e.target.closest('[data-delyes]')) { const c = $('mxDelC'); c.innerHTML = '<div class="mxdelc">deleting…</div>'; try { await SB.deleteMe(); try { ['mixio.demo', 'mixio.demo.best', 'mixio.sb.demo', 'mixio.sb'].forEach(k => localStorage.removeItem(k)); localStorage.removeItem('mixio.profile'); } catch (x) {} c.innerHTML = '<div class="mxdelc">your account is deleted.</div>'; setTimeout(() => location.reload(), 1400); } catch (er) { c.innerHTML = '<div class="mxdelc">couldn\'t delete right now. check your connection and try again.</div>'; } return; } if (e.target.closest('[data-out]')) { ACCOUNT.signOut(); buzz(5); renderAcSet(); toast('signed out'); close(); } else if (e.target.closest('[data-x]')) close(); }; return; }
   let mode = why === 'in' ? 'in' : 'new', failed = false;
   const draw = () => { W.innerHTML = `<div class="wbg"></div>${first ? '' : '<button class="mxx" data-x="1" aria-label="Close">×</button>'}<div class="mxin">
     <div class="wk">${why === 'lb' ? 'world leaderboard' : why === 'import' ? 'your progress made it' : 'one account, every color'}</div><h1 class="mxh">get in the mix</h1>
@@ -1520,7 +1568,7 @@ function dnaAccent() { try { if (save.idn) return idColor(save.idn); const dc = 
   const C = (1 - Math.abs(2 * LL - 1)) * S2, X = C * (1 - Math.abs((h / 60) % 2 - 1)), m = LL - C / 2, [a1, b1, c1] = h < 60 ? [C, X, 0] : h < 120 ? [X, C, 0] : h < 180 ? [0, C, X] : h < 240 ? [0, X, C] : h < 300 ? [X, 0, C] : [C, 0, X]; return [a1 + m, b1 + m, c1 + m]; } catch (e) { return null; } }
 let dnaKey = ''; function applyDNA() { const c = dnaAccent(), v = c ? c.map(x => Math.round(clamp(x, 0, 1) * 255)).join(',') : '142,151,163'; if (v === dnaKey) return; dnaKey = v; document.documentElement.style.setProperty('--dna-rgb', v); try { if (SW) drawBG(); } catch (e) {} }
 function persist() { setTimeout(applyDNA, 0); save.t = Date.now(); try { const o = Object.assign({}, save); delete o.coins; const j = JSON.stringify(o); localStorage.setItem(KEY, j); const bk = JSON.parse(localStorage.getItem(KEY + '.best') || 'null'); if (!bk || (o.level || 1) >= (bk.level || 1)) localStorage.setItem(KEY + '.best', j); } catch (e) {} cloudPush(); try { SB.push(); } catch (e) {} }
-const BUILD = '6ae93717'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
+const BUILD = '6ae93bd7'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
 (() => { try { const m = location.hash.match(/[#&]mx=([^&]+)/); if (!m) return; const r = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))); if (r && typeof r.level === 'number') { const better = r.level >= (save.level || 1); Object.assign(save, mergeSaves(save, r, better)); save.acctAsked = 0; save.acctOffline = 0; save.acct = null; window.__askAcct = 1; try { const o = Object.assign({}, save); delete o.coins; localStorage.setItem(KEY, JSON.stringify(o)); localStorage.setItem(KEY + '.best', JSON.stringify(o)); } catch (e) {} setTimeout(() => { try { persist(); } catch (e) {} }, 0); setTimeout(() => { try { toast('your save is here ✦'); } catch (e) {} }, 2500); } history.replaceState(null, '', location.pathname + location.search); } catch (e) {} })();
 function mainLevel() { try { const m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'), b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); return Math.max((m && m.level) || 0, (b && b.level) || 0); } catch (e) { return 0; } }
 function bringMain() { buzz(8); const u = saveLink(); try { const w = window.open(u, '_blank'); if (!w) location.href = u; } catch (e) { location.href = u; } }
@@ -1838,13 +1886,15 @@ function goTab(t) {
   audio(); $('shop').hidden = true; $('settings').hidden = true; if (t !== 'atlas') { $('atlas').hidden = true; ATLAS.close(); } $('coinVal').textContent = save.coins; coinShown = save.coins;
   if (t === 'home') { showHome(); setNav('home'); }
   else if (t === 'play') { if (!$('home').hidden) $('hPlay').click(); setNav('play'); }
-  else if (t === 'atlas') { $('atlas').hidden = false; ATLAS.open(); setNav('atlas'); }
+  else if (t === 'atlas') { $('atlas').hidden = false; tabIn($('atlas')); ATLAS.open(); setNav('atlas'); }
   else if (t === 'shop') { pendingBuy = null; renderShop(); $('shop').hidden = false; setNav('shop'); }
-  else { $('settings').hidden = false; renderSettings(); setNav('you'); requestAnimationFrame(drawEyeGraph); }
+  else { $('settings').hidden = false; tabIn($('settings')); renderSettings(); setNav('you'); requestAnimationFrame(drawEyeGraph); }
+  if (t === 'home') tabIn($('home'));
 }
+function tabIn(el) { if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return; el.classList.remove('tabin'); void el.offsetWidth; el.classList.add('tabin'); clearTimeout(el._ti); el._ti = setTimeout(() => el.classList.remove('tabin'), 600); }
 let started = false;
 let MODE = 'level';
-function dayNo() { const d = new Date(); return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(2026, 10, 1)) / 864e5) + 1; }
+function dayNo() { return Math.floor((Date.now() - Date.UTC(2026, 10, 1)) / 864e5) + 1; }
 function streakNow() { return save.dlast >= dayNo() - 1 ? (save.dstreak || 0) : 0; }
 function shareDaily(btn) {
   const d = save.daily; if (!d) return; const txt = `mix.io #${d.d} · ${fmtP(d.p)}%`;
@@ -1852,7 +1902,7 @@ function shareDaily(btn) {
   if (navigator.share) navigator.share({ text: txt }).catch(() => {}); else try { navigator.clipboard.writeText(txt).then(ok, ok); } catch (e) { ok(); }
 }
 function resetGlass() { $('shareIc').hidden = true; $('res').hidden = true; $('rev').hidden = true; SPLIT = null; GLOW = null; holdCoins = false; state = 'play'; auto = null; emptyGlass(true); DRIP.clearTint(); }
-function dailyCD() { const n = new Date(), m = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1) - n, h = Math.floor(m / 3.6e6), mm = Math.floor(m / 6e4) % 60; const el = document.querySelector('#hDaily .dcd'); if (el) el.textContent = `next in ${h}h ${String(mm).padStart(2, '0')}m`; }
+function dailyCD() { const n = Date.now(), m = (Date.UTC(2026, 10, 1) + dayNo() * 864e5) - n, h = Math.floor(m / 3.6e6), mm = Math.floor(m / 6e4) % 60; const el = document.querySelector('#hDaily .dcd'); if (el) { const dd = save.daily && save.daily.d === dayNo() && save.daily.beat != null ? `beat ${save.daily.beat}% of the world · ` : ''; el.textContent = `${dd}next in ${h}h ${String(mm).padStart(2, '0')}m`; } }
 setInterval(() => { if (!$('home').hidden) dailyCD(); }, 30000);
 function dnaToHome() { try { const G = dnaGL(); if (!G) return; if (!DNA.sig) { DNA.sig = dnaAccent() || [.7, .74, .8]; DNA.energy = DNA.energy || 1; DNA.speed = DNA.speed || 1; } const hb = $('hBlob'); if (G.cv.parentNode !== hb) hb.appendChild(G.cv); DNA.cv = G.cv; if (!DNA.raf) DNA.raf = requestAnimationFrame(dnaLoop); } catch (e) {} }
 function showHome() {
@@ -2173,7 +2223,7 @@ function setTarget() {
   $('lvlNo').textContent = MODE === 'replay' ? 'replay' : MODE === 'daily' ? 'daily #' + dayNo() : 'no. ' + String(save.level).padStart(3, '0');
   $('tierLbl').textContent = TIER_NAME[target.tier];
   $('tname').textContent = target.name; setTnameWord();
-  $('thex').textContent = rgbToHex(target.rgb); $('thex').hidden = !save.cb; renderHint();
+  $('thex').textContent = rgbToHex(target.rgb); $('thex').hidden = !save.cb; renderHint(); if (save.retryNow && MODE === 'level' && target.name === save.retryNow) { save.retryNow = null; setTimeout(() => toast('back for another try ↺'), 1400); }
   const wg = MODE === 'replay' ? null : MODE === 'daily' ? (save.wipD && save.wipD.day === dayNo() ? save.wipD : null) : (save.wip && save.wip.lvl === save.level ? save.wip : null);
   if (wg && wg.drops && wg.drops.length) { restoreGlass(wg); showLevel(); }
   else { DRAIN = { t: .9, z: 1, lvl: G.y1 + G.ryIn, fill: true }; pour = { t: 0 }; typeNext = true; $('tname').style.opacity = '0'; setTimeout(showLevel, 1000); }
@@ -2763,7 +2813,8 @@ function reveal() {
   const moments = (rankUp ? [{ rank: rankOf(save.eye) }] : []).concat(newBadges); if (rankUp && !ACCOUNT.signedIn() && !save.acctAsk2) { save.acctAsk2 = 1; setTimeout(() => { const w = setInterval(() => { if ($('bMom').hidden && $('res').classList.contains('ready')) { clearInterval(w); openAccountSheet(false, 'lb'); } }, 400); setTimeout(() => clearInterval(w), 20000); }, 2600); }
   if (msg) parts.push(msg);
   rr.innerHTML = parts.join(' · '); rr.hidden = !parts.length;
-  const dd = new Date(); if (daily && !isRep) { const db = document.createElement('button'); db.className = 'sharebtn'; db.textContent = 'share'; db.addEventListener('click', ev => { ev.stopPropagation(); sharePostcard({ name: target.name, mix: yours, tgt: target.rgb, pct, date: Date.now(), day }); }); rr.appendChild(document.createElement('br')); rr.appendChild(db); rr.hidden = false; }
+  const dd = new Date(); if (daily && !isRep) { const line = document.createElement('div'); line.className = 'dwb'; line.textContent = SB.signedIn() ? 'checking the world…' : 'sign in to see how the world did'; rr.appendChild(line); rr.hidden = false; if (SB.signedIn()) SB.postDaily(day, pct).then(r => { if (!r) { line.textContent = ''; return; } const n = Math.max(1, r.n || 1), beat = n > 1 ? Math.round(100 * (r.below || 0) / (n - 1)) : 100; save.daily.beat = beat; persist(); line.innerHTML = `you beat <b>${beat}%</b> of the world today · ${n.toLocaleString('en-US')} ${n === 1 ? 'player' : 'players'}`; }).catch(() => { line.textContent = 'world board offline right now'; }); }
+  if (daily && !isRep) { const db = document.createElement('button'); db.className = 'sharebtn'; db.textContent = 'share'; db.addEventListener('click', ev => { ev.stopPropagation(); sharePostcard({ name: target.name, mix: yours, tgt: target.rgb, pct, date: Date.now(), day }); }); rr.appendChild(document.createElement('br')); rr.appendChild(db); rr.hidden = false; }
   lastShare = { rgb: target.rgb, y: yours, day: daily ? day : 0, name: target.name, pct, date: daily ? dd.toLocaleString('en-US', { month: 'short' }).toLowerCase() + ' ' + dd.getDate() : '' };
   $('shareIc').hidden = !daily || isRep;
   $('res').hidden = false; $('res').classList.remove('ready'); resReady = false;
@@ -2824,11 +2875,12 @@ function next() {
   if (MODE === 'replay') { resetGlass(); MODE = 'level'; REPLAY = null; started = false; goTab('atlas'); return; }
   if (MODE === 'daily') { resetGlass(); MODE = 'level'; started = false; showHome(); setNav('home'); return; }
   if (nexting) return; nexting = true; resReady = false; $('shareIc').hidden = true;
-  $('res').style.opacity = '0'; $('rev').style.opacity = '0'; if (SPLIT) SPLIT.out = 0;
+  const rs = $('res'); rs.style.transition = 'opacity .4s ease, transform .5s cubic-bezier(.4,0,.6,1)'; rs.style.opacity = '0'; rs.style.transform = 'translateY(24px)'; $('rev').style.opacity = '0'; if (SPLIT) SPLIT.out = 0;
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   setTimeout(() => {
-    $('res').hidden = true; $('res').style.opacity = ''; $('rev').hidden = true; GLOW = null; SPLIT = null; holdCoins = false;
-    state = 'play'; emptyGlass(true); DRIP.clearTint();
-    const L = save.level - 1, every = L < 100 ? 10 : L < 1000 ? 25 : 50; const go = () => setTimeout(() => { nexting = false; setTarget(); updateStat(); }, 300); if (L > 1 && L % every === 0 && !(save.lvSeen >= L)) { save.lvSeen = L; levelMoment(L, go); } else go();
+    rs.hidden = true; rs.style.opacity = ''; rs.style.transform = ''; rs.style.transition = ''; $('rev').hidden = true; GLOW = null; SPLIT = null; holdCoins = false;
+    state = 'play'; const flow = !reduce && fluidOK; emptyGlass(true); if (flow) { emptying = 0; DRAIN = { t: 0, lvl: G.y0 }; } DRIP.clearTint();
+    const L = save.level - 1, every = L < 100 ? 10 : L < 1000 ? 25 : 50; const go = () => setTimeout(() => { nexting = false; if (flow) { DRAIN = null; fluidC.style.clipPath = ''; meanA = [0, 0, 0]; wCount = 0; unmixed = 0; try { if (fluidOK) scaleDye(0); } catch (e) {} } setTarget(); updateStat(); }, flow ? 920 : 300); if (L > 1 && L % every === 0 && !(save.lvSeen >= L)) { save.lvSeen = L; levelMoment(L, go); } else go();
   }, 400);
 }
 let nexting = false;
@@ -3196,7 +3248,7 @@ $('diluteBtn').addEventListener('click', () => { audio(); if (drops === 0) retur
 { const cb = $('checkBtn'); let h = null;
   const stop = () => { if (!h) return; cancelAnimationFrame(h.raf); h = null; cb.classList.remove('holding'); cb.style.setProperty('--p', 0); cb.textContent = 'lock it in'; };
   cb.addEventListener('pointerdown', e => { if (cb.disabled || h) return; audio(); h = { t0: performance.now(), last: 0 }; cb.classList.add('holding'); cb.textContent = 'hold…'; try { cb.setPointerCapture(e.pointerId); } catch (x) {}
-    const f = now => { if (!h) return; const k = Math.min(1, (now - h.t0) / 600); cb.style.setProperty('--p', k); const step = Math.floor(k * 6); if (step > h.last) { h.last = step; buzz(2 + step); } if (k >= 1) { stop(); haptic(25); clink(); check(); return; } h.raf = requestAnimationFrame(f); }; h.raf = requestAnimationFrame(f); });
+    const f = now => { if (!h) return; const k = Math.min(1, (now - h.t0) / 600); cb.style.setProperty('--p', k); const step = Math.floor(k * 6); if (step > h.last) { h.last = step; buzz(2 + step); } if (k >= 1) { stop(); haptic(25); clink(); cb.classList.remove('locked'); void cb.offsetWidth; cb.classList.add('locked'); setTimeout(() => cb.classList.remove('locked'), 700); try { ripples.push({ x: G.cx, t: 0, a: .7 }); } catch (x) {} check(); return; } h.raf = requestAnimationFrame(f); }; h.raf = requestAnimationFrame(f); });
   ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => cb.addEventListener(ev, stop)); }
 $('nextBtn').addEventListener('click', next);
 /* ================= Shop ================= */
@@ -3425,7 +3477,7 @@ function openRanks() {
     RANKS.slice().reverse().map(r => { const i = RANKS.indexOf(r), hi = i < RANKS.length - 1 ? RANKS[i + 1][0] : 100, st = i < ci ? 'done' : i === ci ? 'cur' : 'next', pr = i === ci ? clamp((ey - r[0]) / (hi - r[0]), 0, 1) : i < ci ? 1 : 0;
       return `<div class="rkli ${st}" style="--gc:${r[2]}"><span class="rkg">${gemSVG(r, 34)}</span><span class="rkt"><b>${r[1]}</b><small>${r[0]}–${hi}${st === 'cur' ? ' · you' : best >= r[0] && st === 'next' ? ' · reached before' : ''}</small><i><u style="width:${(pr * 100).toFixed(0)}%"></u></i></span><span class="rkn">${i + 1}</span></div>`; }).join('') +
     (() => { const P = chParts(); return `<div class="rkcap"><div class="rkbd"><span><small>colors</small><b>${P.n.toLocaleString('en-US')}<i> / ${ALLN.length.toLocaleString('en-US')}</i></b></span><span><small>accuracy</small><b>${Math.round(P.q * 100)}%</b></span><span><small>skill</small><b>${Math.round(P.sk * 100)}</b></span></div>chroma grows as you find more of the world's colors, match them well, and beat harder ones. find all ${ALLN.length.toLocaleString('en-US')} with great accuracy and you break 100.</div>`; })() +
-    `<div class="lbw" id="lbW"><div class="lbh"><span>world leaderboard</span><small id="lbMe"></small></div><div id="lbL"><div class="lbmsg">loading the world…</div></div></div>` + (ACCOUNT.signedIn() ? '' : `<button class="lbcard lq" data-lb="1"><span><b>world leaderboard</b><small>guests can't compete. create an account to join the world rankings and earn world awards.</small></span><span class="lbgo">sign in ›</span></button>`);
+    `<div class="lbw" id="lbW"><div class="lbh"><span>world leaderboard</span><small id="lbMe"></small></div><div id="lbL"><div class="lbmsg">loading the world…</div></div></div>` + (ACCOUNT.signedIn() ? '' : `<button class="lbcard lq" data-lb="1"><span><b>world leaderboard</b><small>make an account to join the world rankings and earn world awards.</small></span><span class="lbgo">sign in ›</span></button>`);
   (async () => { const L = $('lbL'); try { await SB.push(true); const [rows, me] = await Promise.all([SB.top(50), SB.myRank().catch(() => 0)]); if (!L.isConnected) return; const uid = SB.signedIn() ? (save.acct && save.acct.id) : null;
       L.innerHTML = rows.length ? rows.map((r, k) => `<div class="lbr${r.id === uid ? ' me' : ''}"><span class="lbn">${k + 1}</span><span class="lbd" style="background:${/^#[0-9a-f]{6}$/i.test(r.dna || '') ? r.dna : '#8a96a8'}"></span><span class="lbm"></span><span class="lbc">${Number(r.chroma).toFixed(1)}${r.wr > 0 ? `<small>+${Math.round(r.wr).toLocaleString('en-US')}</small>` : ''}</span></div>`).join('') : '<div class="lbmsg">no one yet. be the first.</div>';
       L.querySelectorAll('.lbm').forEach((el, k) => el.textContent = (rows[k].name || 'player').toLowerCase());
@@ -3469,18 +3521,24 @@ const SPEC = (() => {
   function show(g, seen) { ensure(); got = g; list = RING_ITEMS || []; fresh = new Set(Object.keys(g).filter(n => !seen.has(n))); if (seen.size === 0) fresh.clear(); freshT = performance.now(); requestAnimationFrame(t => { size(); build(); X = clamp(X, 0, maxX()); kick(); }); }
   return { show };
 })();
+function renderJournal() { const W = $('jPc'); if (!W) return; const L = (save.palette || []).slice().sort((a, b) => (b.d || 0) - (a.d || 0));
+  W.innerHTML = L.length ? L.slice(0, 18).map((p, k) => { const a = atlasOf(p.n), pl = a ? a[3] : ''; return `<button class="jcard" data-n="${p.n.replace(/"/g, '&quot;')}" style="--t:${p.h};--m:${p.m || p.h};--d:${k * 35}ms"><span class="jink"><i></i></span><span class="jtx"><b></b><small></small></span><span class="jpct">${fmtP(p.p)}%</span></button>`; }).join('') + (L.length > 18 ? `<button class="jmore" data-all="1">all ${L.length} postcards ›</button>` : '') : '<div class="jempty">your first postcard arrives when you match a color.</div>';
+  W.querySelectorAll('.jcard').forEach((b, k) => { const p = L[k], a = atlasOf(p.n); b.querySelector('b').textContent = p.n; b.querySelector('small').textContent = a ? a[3] : ''; });
+  const st = $('jSt'); if (st) { try { const got = {}; (save.palette || []).forEach(p => got[p.n] = 1); const cs = getCountries().filter(c => c.ns.some(n => got[n])); st.innerHTML = cs.slice(0, 24).map(c => `<span class="jstamp" title="${c.cc}">${FLAGS && FLAGS[c.cc] ? `<img alt="" src="${FLAGS[c.cc]}">` : ''}<em>${(c.name || c.cc || '').toString().toLowerCase()}</em></span>`).join('') || '<div class="jempty">stamps appear as you find colors in new countries.</div>'; } catch (e) { st.innerHTML = ''; } } }
+{ const T = $('jTabs'); if (T) T.addEventListener('click', e => { const b = e.target.closest('[data-p]'); if (!b) return; buzz(4); T.querySelectorAll('[data-p]').forEach(x => x.classList.toggle('on', x === b)); const i = [...T.querySelectorAll('[data-p]')].indexOf(b); T.style.setProperty('--ji', i); document.querySelectorAll('.jpg').forEach(pg => { const on = pg.dataset.p === b.dataset.p; pg.hidden = !on; if (on) tabIn(pg); }); }); }
+{ const W = $('jPc'); if (W) W.addEventListener('click', e => { const c = e.target.closest('.jcard'); if (c) { buzz(5); try { STORY.openName(c.dataset.n, c); } catch (x) {} return; } if (e.target.closest('[data-all]')) { try { openPassport(); } catch (x) {} } }); }
 function renderSettings(quiet) {
   renderFav();
   const st = save.stats, ey = (save.eye ?? CH0), rk = rankOf(ey);
   $('eNum').textContent = fmtC(ey); $('eRank').innerHTML = badge(rk) + ' ' + rk[1]; 
   ERING.show(quiet === true); renderRankRow(); renderDNA();
   drawEyeGraph();
-  { $('sAvg').textContent = st.n ? (st.sum / st.n).toFixed(1) + '%' : '–'; $('sPerf').textContent = st.perfects || 0; $('sStreak').textContent = Math.max(save.bestStreak || 0, st.streak || 0); }
+  { $('sAvg').textContent = st.n ? (st.sum / st.n).toFixed(1) + '%' : '–'; $('sPerf').textContent = st.perfects || 0; $('sStreak').textContent = save.daysN || 1; }
   const got = {}; save.palette.forEach(p => got[p.n] = p); const nGot = ALLN.filter(n => got[n]).length;
   $('palCount').innerHTML = `${nGot.toLocaleString('en-US')} / ${ALLN.length.toLocaleString('en-US')} collected<div class="wbar"><i style="width:${(nGot / ALLN.length * 100).toFixed(1)}%"></i></div>`;
   renderPPRow(); renderColls(got);
   save.seenWall = ALLN.filter(n => got[n]);
-  renderBadges();
+  renderBadges(); try { renderJournal(); } catch (e) {}
   $('tSound').classList.toggle('on', !save.muted); $('tHap').classList.toggle('on', !!save.haptics); $('tCB').classList.toggle('on', !!save.cb);
 }
 $('gearBtn').addEventListener('click', () => goTab('home'));
@@ -3788,10 +3846,10 @@ function start() {
   if (!save.idn && !save.idSkip) { const bc = $('bootc'); if (bc) { bc.style.transition = 'opacity .6s'; bc.style.opacity = '0'; bc.style.pointerEvents = 'none'; setTimeout(() => { bc.style.display = 'none'; }, 650); } $('intro').hidden = true; openWelcome(); } else runIntro(() => {});
   { let hidAt = 0; const cover = () => { const bc = $('bootc'); if (!bc) return; bc.style.transition = 'none'; bc.style.display = ''; bc.style.opacity = '1'; bc.style.pointerEvents = 'all'; };
     const back = () => { const away = hidAt ? Date.now() - hidAt : 0; hidAt = 0; const bc = $('bootc');
-      if (away > 15000) { try { ['settings', 'atlas', 'story', 'rkSheet', 'setSheet', 'bMom'].forEach(id => { const e = $(id); if (e) e.hidden = true; }); ATLAS.close(); setNav('home'); showHome(); $('home').hidden = false; requestAnimationFrame(() => { if (bc) bc.style.transition = 'opacity .5s'; runIntro(() => {}); }); } catch (e) { if (bc) bc.style.display = 'none'; } }
+      if (false) {}
       else if (bc) { bc.style.transition = 'opacity .35s'; requestAnimationFrame(() => { bc.style.opacity = '0'; bc.style.pointerEvents = 'none'; setTimeout(() => { if (bc.style.opacity === '0') bc.style.display = 'none'; }, 380); }); } };
-    document.addEventListener('visibilitychange', () => { if (document.hidden) { hidAt = Date.now(); cover(); } else back(); });
-    addEventListener('pagehide', () => { hidAt = Date.now(); cover(); });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { hidAt = Date.now(); try { if (state === 'play' && glassLog.length) saveGlass(); persist(); SB.push(true); } catch (e) {} cover(); } else back(); });
+    addEventListener('pagehide', () => { hidAt = Date.now(); try { persist(); SB.push(true); } catch (e) {} cover(); });
     addEventListener('pageshow', e => { if (e.persisted) { if (!hidAt) hidAt = Date.now() - 16000; back(); } }); }
   $('hPlay').addEventListener('click', () => { audio(); $('hPlay').classList.remove('nudge'); if (ONB.newPlayer() && !save.tutDone) setTimeout(() => { if (state === 'play' && !TUT.on()) TUT.start(); }, 1700); hideHome(); setNav('play'); if (MODE !== 'level') { REPLAY = null; if (state === 'play' && glassLog.length) saveGlass(); resetGlass(); MODE = 'level'; started = false; } if (!started) { started = true; setTarget(); updateStat(); cbLine(); } });
   $('homeBtn').addEventListener('click', () => goTab('home'));

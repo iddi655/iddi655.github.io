@@ -1576,7 +1576,7 @@ function dnaAccent() { try { if (save.idn) return idColor(save.idn); const dc = 
   const C = (1 - Math.abs(2 * LL - 1)) * S2, X = C * (1 - Math.abs((h / 60) % 2 - 1)), m = LL - C / 2, [a1, b1, c1] = h < 60 ? [C, X, 0] : h < 120 ? [X, C, 0] : h < 180 ? [0, C, X] : h < 240 ? [0, X, C] : h < 300 ? [X, 0, C] : [C, 0, X]; return [a1 + m, b1 + m, c1 + m]; } catch (e) { return null; } }
 let dnaKey = ''; function applyDNA() { const c = dnaAccent(), v = c ? c.map(x => Math.round(clamp(x, 0, 1) * 255)).join(',') : '142,151,163'; if (v === dnaKey) return; dnaKey = v; document.documentElement.style.setProperty('--dna-rgb', v); try { if (SW) drawBG(); } catch (e) {} }
 function persist() { setTimeout(applyDNA, 0); save.t = Date.now(); try { const o = Object.assign({}, save); delete o.coins; const j = JSON.stringify(o); localStorage.setItem(KEY, j); const bk = JSON.parse(localStorage.getItem(KEY + '.best') || 'null'); if (!bk || (o.level || 1) >= (bk.level || 1)) localStorage.setItem(KEY + '.best', j); } catch (e) {} cloudPush(); try { SB.push(); } catch (e) {} }
-const BUILD = '6ae95135'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
+const BUILD = '6ae95200'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
 (() => { try { const m = location.hash.match(/[#&]mx=([^&]+)/); if (!m) return; const r = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))); if (r && typeof r.level === 'number') { const better = r.level >= (save.level || 1); Object.assign(save, mergeSaves(save, r, better)); save.acctAsked = 0; save.acctOffline = 0; save.acct = null; window.__askAcct = 1; try { const o = Object.assign({}, save); delete o.coins; localStorage.setItem(KEY, JSON.stringify(o)); localStorage.setItem(KEY + '.best', JSON.stringify(o)); } catch (e) {} setTimeout(() => { try { persist(); } catch (e) {} }, 0); setTimeout(() => { try { toast('your save is here ✦'); } catch (e) {} }, 2500); } history.replaceState(null, '', location.pathname + location.search); } catch (e) {} })();
 function mainLevel() { try { const m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'), b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); return Math.max((m && m.level) || 0, (b && b.level) || 0); } catch (e) { return 0; } }
 function bringMain() { buzz(8); const u = saveLink(); try { const w = window.open(u, '_blank'); if (!w) location.href = u; } catch (e) { location.href = u; } }
@@ -1894,6 +1894,7 @@ function setNav(t) { navMode = t; document.querySelectorAll('#nav button').forEa
 function navDrop(t) { const nv = $('nav'); if (!nv) return; let d = $('navDrop'); if (!d) { d = document.createElement('span'); d.id = 'navDrop'; nv.insertBefore(d, nv.firstChild); } const b = nv.querySelector(`button[data-t="${t}"]`); if (!b || !b.offsetWidth) { d.style.opacity = '0'; return; } const x = b.offsetLeft, w = b.offsetWidth, px = d._x, pw = d._w || w; d.style.opacity = '1';
   if (px == null || matchMedia('(prefers-reduced-motion: reduce)').matches) { d.style.transition = 'none'; d.style.transform = `translateX(${x}px)`; d.style.width = w + 'px'; } else if (px !== x) { const l = Math.min(px, x), r = Math.max(px + pw, x + w); d.style.transition = 'transform .22s cubic-bezier(.4,0,.6,1), width .22s cubic-bezier(.4,0,.6,1)'; d.style.transform = `translateX(${l}px) scaleY(.82)`; d.style.width = (r - l) + 'px'; clearTimeout(d._t); d._t = setTimeout(() => { d.style.transition = 'transform .55s cubic-bezier(.3,1.5,.45,1), width .55s cubic-bezier(.3,1.5,.45,1)'; d.style.transform = `translateX(${x}px)`; d.style.width = w + 'px'; }, 200); }
   d._x = x; d._w = w; }
+addEventListener('resize', () => { try { const k = document.getElementById('kHost'); if (k && !k.hidden) k.shadowRoot.querySelector('.seg button[aria-pressed="true"]')?.click(); } catch (e) {} });
 addEventListener('resize', () => { try { const d = $('navDrop'); if (d) d._x = null; navDrop(navMode); } catch (e) {} });
 function goTab(t) {
   audio(); $('shop').hidden = true; $('settings').hidden = true; if (t !== 'cards') try { CARDS.shut(); } catch (e) {} if (t !== 'atlas') { $('atlas').hidden = true; ATLAS.close(); } $('coinVal').textContent = save.coins; coinShown = save.coins;
@@ -3935,9 +3936,13 @@ button:focus-visible{outline:2px solid rgb(var(--dna));outline-offset:2px}
 .chroma i{width:12px;height:12px;border-radius:50%;background:conic-gradient(#ff5ad1,#ffd66b,#5affc8,#5aa8ff,#b45aff,#ff5ad1);box-shadow:0 0 10px rgba(180,90,255,.6)}
 .chroma.bump{animation:bump .5s}
 @keyframes bump{40%{transform:scale(1.15)}}
-.seg{display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 .5px rgba(255,255,255,.1);margin-bottom:16px}
-.seg button{flex:1;font:700 13px var(--f);padding:9px 0;border-radius:999px;color:var(--mut);transition:background .25s,color .25s}
-.seg button[aria-pressed="true"]{background:rgba(255,255,255,.12);color:var(--fg);box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.seg{position:relative;display:flex;gap:0;padding:5px;height:50px;border-radius:25px;margin-bottom:16px;isolation:isolate;background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,rgba(255,255,255,.09) 46%,rgba(255,255,255,.015) 50.5%,rgba(255,255,255,0) 70%,rgba(140,215,255,.07) 100%),linear-gradient(180deg,rgba(40,70,95,.28),rgba(14,22,32,.42));-webkit-backdrop-filter:blur(28px) saturate(2.2) brightness(1.1);backdrop-filter:blur(28px) saturate(2.2) brightness(1.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(160,225,255,.18),inset 0 0 0 .5px rgba(255,255,255,.16),inset 0 -14px 22px -12px rgba(110,200,255,.22),0 20px 44px -12px rgba(0,0,0,.75),0 2px 8px rgba(0,0,0,.4)}
+.seg::before{content:"";position:absolute;left:6%;right:6%;top:1.5px;height:44%;border-radius:999px 999px 50% 50%/100% 100% 40% 40%;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.02));pointer-events:none;z-index:0}
+.seg .lens{position:absolute;top:5px;bottom:5px;left:0;width:0;border-radius:20px;z-index:1;pointer-events:none;transition:transform .55s cubic-bezier(.3,1.5,.45,1),width .55s cubic-bezier(.3,1.5,.45,1);background:radial-gradient(110% 80% at 50% 0%,rgba(255,255,255,.22),rgba(255,255,255,.04) 60%),radial-gradient(120% 80% at 50% 115%,rgba(150,225,255,.24),rgba(150,225,255,0) 60%),rgba(255,255,255,.05);box-shadow:inset 0 8px 12px -9px rgba(255,255,255,.6),inset 0 -8px 12px -9px rgba(170,230,255,.45),inset 0 0 0 .5px rgba(255,255,255,.22),0 8px 22px -10px rgba(120,200,255,.45)}
+.seg .lens.sq{transition:transform .22s cubic-bezier(.4,0,.6,1),width .22s cubic-bezier(.4,0,.6,1)}
+.seg button{position:relative;z-index:2;flex:1;font:650 13.5px var(--f);letter-spacing:.01em;border-radius:20px;color:rgba(255,255,255,.58);text-shadow:0 1px 1px rgba(0,0,0,.35);transition:color .3s,transform .18s}
+.seg button:active{transform:scale(.94)}
+.seg button[aria-pressed="true"]{color:#fff}
 .empty{font-size:13px;color:var(--mut);text-align:center;padding:10px 0 0}
 
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
@@ -4124,7 +4129,7 @@ button:focus-visible{outline:2px solid rgb(var(--dna));outline-offset:2px}
 @media (prefers-reduced-motion:reduce){.face *,.face,.swirl,.pkx{animation:none!important}}
 </style><div class="page" id="page"><div class="in">
  <div class="hd"><div class="ttl">collection</div><div class="chroma" id="bal" aria-label="chroma"><i></i><span id="balN">0</span></div></div>
- <div class="seg" role="tablist"><button data-s="packs" aria-pressed="true">packs</button><button data-s="col" aria-pressed="false">cards</button><button data-s="pp" aria-pressed="false">passport</button></div>
+ <div class="seg" role="tablist"><i class="lens"></i><button data-s="packs" aria-pressed="true">packs</button><button data-s="col" aria-pressed="false">cards</button><button data-s="pp" aria-pressed="false">passport</button></div>
  <section class="view on" id="v-packs"><div class="sub" style="margin-top:0">base set packs</div><div class="packs" id="packs"></div><div class="odds" id="odds"></div></section>
  <section class="view" id="v-col"><div class="prog"><span id="pN">0/50</span><div class="bar"><i id="pB" style="width:0"></i></div><span id="pS"></span></div><div class="cgrid" id="cgrid"></div><div class="empty" id="cEmpty" hidden>open a pack to start your collection</div></section>
 </div></div><div class="stage" id="stage">
@@ -4314,8 +4319,9 @@ function renderCol(){const g=$('#cgrid');g.innerHTML='';let have=0;
   $('#pN').textContent=have+'/50';$('#pB').style.width=(have*2)+'%';$('#pS').textContent=st.own[51]?'+ secret':'';}
 /* ---------- backs + fronts gallery ---------- */
 
-function seg(v){R.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===v));R.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));if(v==='col')renderCol();$('#page').scrollTop=0;}
-R.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{try{buzz(5);}catch(e){}if(b.dataset.s==='pp'){try{openPassport();}catch(e){}return;}seg(b.dataset.s);});
+function lens(v){const b=R.querySelector(`.seg button[data-s="${v}"]`),L=R.querySelector('.seg .lens');if(!b||!L||!b.offsetWidth)return;L.style.width=b.offsetWidth+'px';L.style.transform=`translateX(${b.offsetLeft}px)`;}
+function seg(v){R.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===v));requestAnimationFrame(()=>lens(v));R.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));if(v==='col')renderCol();$('#page').scrollTop=0;}
+R.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{try{buzz(5);}catch(e){}if(b.dataset.s==='pp'){lens('pp');const cur=(R.querySelector('.seg button[aria-pressed="true"]')||{}).dataset;setTimeout(()=>{try{openPassport();}catch(e){}},180);setTimeout(()=>lens(cur&&cur.s||'packs'),700);return;}seg(b.dataset.s);});
 
 if(save.chroma==null&&(save.level||1)<=1)save.chroma=100;
 renderPacks();

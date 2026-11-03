@@ -1025,6 +1025,8 @@ body.bgp #nav,body.bgp .nav{opacity:0!important;pointer-events:none!important;tr
 .wplay{display:inline-flex;align-items:center;gap:8px;margin-top:18px;padding:8px 14px;border-radius:999px;font:600 12.5px var(--f-ui);letter-spacing:.02em;color:rgba(220,240,255,.8);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.025));box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 .5px rgba(255,255,255,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);animation:welPulse 3.2s 2s ease-in-out infinite}
 .wplay i{width:7px;height:7px;border-radius:50%;background:#9fe0ff;box-shadow:0 0 10px #9fe0ff}
 .wstep h1,.wstep h2,.wstep .wsub,.wstep .wk,.mixa .mxh,.mixa .wsub,.mixa .wk{text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.mxbring{display:block;width:100%;margin-top:14px;padding:14px 16px;border-radius:18px;border:0;text-align:center;color:#fff;background:linear-gradient(180deg,rgba(var(--dna-rgb),.28),rgba(var(--dna-rgb),.1));box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 .5px rgba(var(--dna-rgb),.5),0 10px 30px -14px rgba(var(--dna-rgb),.8)}
+.mxbring b{display:block;font:700 15.5px var(--f-ui)}.mxbring small{display:block;margin-top:3px;font:500 12px var(--f-ui);color:rgba(255,255,255,.65)}
 </style>
 
 <div id="bootc" style="position:fixed;inset:0;background:#000;z-index:9999;transition:opacity .5s"></div>
@@ -1378,7 +1380,7 @@ function openAccountSheet(first, why) {
   const close = () => { W.classList.add('out'); setTimeout(() => { W.hidden = true; W.classList.remove('out'); W.innerHTML = ''; BGP.off(); if (first) setTimeout(ONB.next, 300); }, 600); };
   if (si) { W.innerHTML = `<div class="wbg"></div><button class="mxx" data-x="1" aria-label="Close">×</button><div class="mxin"><div class="wk">you're in the mix</div><h2>${SB.uname().toLowerCase()}</h2><div class="wsub">your progress is saved to your account and you're on the world leaderboard.</div><button class="primary wgo" data-x="1">back to mixing</button><button class="mxlink" data-out="1">sign out</button></div>`;
     W.hidden = false; BGP.on(W); W.onclick = e => { if (e.target.closest('[data-out]')) { ACCOUNT.signOut(); buzz(5); renderAcSet(); toast('signed out'); close(); } else if (e.target.closest('[data-x]')) close(); }; return; }
-  let mode = 'new', failed = false;
+  let mode = why === 'in' ? 'in' : 'new', failed = false;
   const draw = () => { W.innerHTML = `<div class="wbg"></div>${first ? '' : '<button class="mxx" data-x="1" aria-label="Close">×</button>'}<div class="mxin">
     <div class="wk">${why === 'lb' ? 'world leaderboard' : why === 'import' ? 'your progress made it' : 'one account, every color'}</div><h1 class="mxh">get in the mix</h1>
     <div class="wsub">${why === 'import' && mode === 'new' ? 'lock your progress into a real account so it\'s safe, syncs everywhere and counts on the world leaderboard.' : mode === 'new' ? 'make your account to climb the world leaderboard, earn world awards and keep your progress safe.' : 'welcome back. sign in to pick up where you left off.'}</div>
@@ -1387,11 +1389,13 @@ function openAccountSheet(first, why) {
     <input class="idin" id="mxP" type="password" maxlength="64" autocomplete="${mode === 'new' ? 'new-password' : 'current-password'}" placeholder="password${mode === 'new' ? ' (6+ characters)' : ''}"></div>
     <button class="primary wgo" id="mxGo">${mode === 'new' ? 'create my account' : 'sign in'}</button>
     <div class="mxnote" id="mxN"></div>
+    ${!ON_SITE && mainLevel() > 1 ? `<button class="mxbring" data-bring="1"><b>bring my saved game</b><small>level ${mainLevel()} · opens mix-io.github.io with your progress</small></button>` : ''}
     ${failed ? '<button class="mxlink" data-off="1">play offline for now</button>' : ''}<div class="wplay"><i></i>take a pause · play with the water behind</div></div>`; };
   draw(); W.hidden = false; BGP.on(W);
   const note = t => { const n = $('mxN'); n.textContent = t; n.classList.remove('pop'); void n.offsetWidth; n.classList.add('pop'); };
   W.onclick = async e => {
     if (e.target.closest('[data-x]')) return close();
+    if (e.target.closest('[data-bring]')) return bringMain();
     if (e.target.closest('[data-off]')) { save.acctOffline = Date.now(); save.acctMode = 'guest'; persist(); return close(); }
     const m = e.target.closest('[data-m]'); if (m) { W._u = $('mxU').value; mode = m.dataset.m; buzz(4); draw(); return; }
     if (e.target.closest('#mxGo')) { const u = ($('mxU').value || '').trim().toLowerCase(), pw = $('mxP').value || '';
@@ -1442,7 +1446,7 @@ const BGP = { n: 0, on(W) { BGP.n++; try { $('home').hidden = false; $('home').c
 function openWelcome() {
   const W = $('wel'); if (!W.hidden) return; const st = { name: '', m: 1, d: 1, fav: '' }; const days = m => [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][(m || 1) - 1];
   W.innerHTML = `<div class="wbg"></div>
-  <div class="wstep" data-s="0"><div class="wwm"><div class="wdrop"></div><div class="wrip"></div><div class="wk">welcome to</div><h1>mix.io</h1></div><div class="wsub">mix food-coloring dyes in a glass of water to match colors from all over the world.</div><div class="wplay"><i></i>take a pause · touch the water, it's alive</div><button class="primary wgo wbeg">begin</button></div>
+  <div class="wstep" data-s="0"><div class="wwm"><div class="wdrop"></div><div class="wrip"></div><div class="wk">welcome to</div><h1>mix.io</h1></div><div class="wsub">mix food-coloring dyes in a glass of water to match colors from all over the world.</div><div class="wplay"><i></i>take a pause · touch the water, it's alive</div><button class="primary wgo wbeg">begin</button>${!ON_SITE && mainLevel() > 1 ? `<button class="mxbring wbring" style="max-width:300px;margin:16px auto 0"><b>already playing? bring my game</b><small>level ${mainLevel()} · one tap, opens on mix-io.github.io</small></button>` : ON_SITE ? '<button class="mxlink wsignin">already have an account? sign in ›</button>' : ''}</div>
   <div class="wstep" data-s="1"><div class="wk">let's make your color dna</div><h2>what's your name?</h2><div class="wbody"><input id="wName" class="idin" maxlength="24" autocomplete="given-name" placeholder="first name" enterkeyhint="next"></div><button class="primary wgo" id="wG1" disabled>continue</button></div>
   <div class="wstep" data-s="2"><div class="wk" id="wHi">nice to meet you</div><h2>what's your birthday?</h2><div class="wbody"><div class="idbd"><div class="whl" id="wM"></div><div class="whl" id="wD"></div></div></div><button class="primary wgo" id="wG2">continue</button></div>
   <div class="wstep" data-s="3"><div class="wk">last one</div><h2>favorite color?</h2><div class="wbody"><div class="idfav">${IDFAV.map(f => `<button class="idf" data-f="${f[0]}" style="--c:${f[2]}" aria-label="${f[0]}"></button>`).join('')}</div></div><button class="primary wgo" id="wG3" disabled>create my dna</button></div>
@@ -1455,7 +1459,7 @@ function openWelcome() {
     let snT = 0, tch = false; const snap = () => { if (tch) return; const k = clamp(Math.round(sc.scrollTop / IH), 0, items.length - 1); if (Math.abs(sc.scrollTop - k * IH) > 2) sc.scrollTo({ top: k * IH, behavior: 'smooth' }); }; sc.addEventListener('touchstart', () => { tch = true; clearTimeout(snT); }, { passive: true }); sc.addEventListener('touchend', () => { tch = false; clearTimeout(snT); snT = setTimeout(snap, 140); }, { passive: true }); sc.addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(paint); clearTimeout(snT); snT = setTimeout(snap, 140); }, { passive: true }); its.forEach((it, k) => it.addEventListener('click', () => sc.scrollTo({ top: k * IH, behavior: 'smooth' })));
     requestAnimationFrame(() => { sc.scrollTop = sel * IH; paint(); el._ready = true; }); };
   const fillD = () => { const n = days(st.m); if (st.d > n) st.d = n; $('wD')._ready = false; wheel($('wD'), Array.from({ length: n }, (_, i) => String(i + 1)), st.d - 1, i => st.d = i + 1); };
-  steps[0].addEventListener('click', e => { if (cur !== 0 || !e.target.closest('.wwm,.wbeg,h1')) return; go(1); setTimeout(() => { try { $('wName').focus({ preventScroll: true }); } catch (e) {} }, 700); });
+  steps[0].addEventListener('click', e => { if (e.target.closest('.wbring')) return bringMain(); if (e.target.closest('.wsignin')) { buzz(5); W.classList.add('out'); openAccountSheet(true, 'in'); setTimeout(() => { W.hidden = true; W.classList.remove('out'); W.innerHTML = ''; BGP.off(); }, 900); return; } if (cur !== 0 || !e.target.closest('.wwm,.wbeg,h1')) return; go(1); setTimeout(() => { try { $('wName').focus({ preventScroll: true }); } catch (e) {} }, 700); });
   const nm = $('wName'); nm.addEventListener('input', () => $('wG1').disabled = !nm.value.trim()); nm.addEventListener('keydown', e => { if (e.key === 'Enter' && nm.value.trim()) $('wG1').click(); });
   $('wG1').addEventListener('click', () => { st.name = nm.value.trim().slice(0, 24); if (!st.name) return; nm.blur(); $('wHi').textContent = `nice to meet you, ${st.name.toLowerCase()}`; go(2); if (!$('wM').firstChild) { wheel($('wM'), MONTHS, 0, i => { const was = st.m; st.m = i + 1; if (was !== st.m && $('wD').firstChild) fillD(); }); fillD(); } });
   $('wG2').addEventListener('click', () => go(3));
@@ -1508,6 +1512,8 @@ let dnaKey = ''; function applyDNA() { const c = dnaAccent(), v = c ? c.map(x =>
 function persist() { setTimeout(applyDNA, 0); save.t = Date.now(); try { const o = Object.assign({}, save); delete o.coins; const j = JSON.stringify(o); localStorage.setItem(KEY, j); const bk = JSON.parse(localStorage.getItem(KEY + '.best') || 'null'); if (!bk || (o.level || 1) >= (bk.level || 1)) localStorage.setItem(KEY + '.best', j); } catch (e) {} cloudPush(); try { SB.push(); } catch (e) {} }
 const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
 (() => { try { const m = location.hash.match(/[#&]mx=([^&]+)/); if (!m) return; const r = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))); if (r && typeof r.level === 'number') { const better = r.level >= (save.level || 1); Object.assign(save, mergeSaves(save, r, better)); save.acctAsked = 0; save.acctOffline = 0; save.acct = null; window.__askAcct = 1; try { const o = Object.assign({}, save); delete o.coins; localStorage.setItem(KEY, JSON.stringify(o)); localStorage.setItem(KEY + '.best', JSON.stringify(o)); } catch (e) {} setTimeout(() => { try { persist(); } catch (e) {} }, 0); setTimeout(() => { try { toast('your save is here ✦'); } catch (e) {} }, 2500); } history.replaceState(null, '', location.pathname + location.search); } catch (e) {} })();
+function mainLevel() { try { const m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'), b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); return Math.max((m && m.level) || 0, (b && b.level) || 0); } catch (e) { return 0; } }
+function bringMain() { buzz(8); const u = saveLink(); try { const w = window.open(u, '_blank'); if (!w) location.href = u; } catch (e) { location.href = u; } }
 function saveLink() { let m = null; try { m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'); const b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); if (b && (!m || (b.level || 1) > (m.level || 1))) m = b; } catch (e) {} const o = Object.assign({}, m && m.level ? m : save); delete o.coins; delete o.acct; o.eyeAll = (o.eyeAll || []).slice(-300); return SITE + '#mx=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(o))))); }
 /* cloud save: survives new versions, cleared site data and other devices */
 const CLOUD = { ref: null, busy: false, again: false, tm: 0, pushedT: 0 };

@@ -1576,11 +1576,12 @@ function dnaAccent() { try { if (save.idn) return idColor(save.idn); const dc = 
   const C = (1 - Math.abs(2 * LL - 1)) * S2, X = C * (1 - Math.abs((h / 60) % 2 - 1)), m = LL - C / 2, [a1, b1, c1] = h < 60 ? [C, X, 0] : h < 120 ? [X, C, 0] : h < 180 ? [0, C, X] : h < 240 ? [0, X, C] : h < 300 ? [X, 0, C] : [C, 0, X]; return [a1 + m, b1 + m, c1 + m]; } catch (e) { return null; } }
 let dnaKey = ''; function applyDNA() { const c = dnaAccent(), v = c ? c.map(x => Math.round(clamp(x, 0, 1) * 255)).join(',') : '142,151,163'; if (v === dnaKey) return; dnaKey = v; document.documentElement.style.setProperty('--dna-rgb', v); try { if (SW) drawBG(); } catch (e) {} }
 function persist() { setTimeout(applyDNA, 0); save.t = Date.now(); try { const o = Object.assign({}, save); delete o.coins; const j = JSON.stringify(o); localStorage.setItem(KEY, j); const bk = JSON.parse(localStorage.getItem(KEY + '.best') || 'null'); if (!bk || (o.level || 1) >= (bk.level || 1)) localStorage.setItem(KEY + '.best', j); } catch (e) {} cloudPush(); try { SB.push(); } catch (e) {} }
-const BUILD = '6ae95200'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
+const BUILD = '6ae952e9'; const SITE = 'https://mix-io.github.io/', ON_SITE = /github\.io$/.test(location.hostname);
 (() => { try { const m = location.hash.match(/[#&]mx=([^&]+)/); if (!m) return; const r = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(m[1]))))); if (r && typeof r.level === 'number') { const better = r.level >= (save.level || 1); Object.assign(save, mergeSaves(save, r, better)); save.acctAsked = 0; save.acctOffline = 0; save.acct = null; window.__askAcct = 1; try { const o = Object.assign({}, save); delete o.coins; localStorage.setItem(KEY, JSON.stringify(o)); localStorage.setItem(KEY + '.best', JSON.stringify(o)); } catch (e) {} setTimeout(() => { try { persist(); } catch (e) {} }, 0); setTimeout(() => { try { toast('your save is here ✦'); } catch (e) {} }, 2500); } history.replaceState(null, '', location.pathname + location.search); } catch (e) {} })();
 function mainLevel() { try { const m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'), b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); return Math.max((m && m.level) || 0, (b && b.level) || 0); } catch (e) { return 0; } }
 function bringMain() { buzz(8); const u = saveLink(); try { const w = window.open(u, '_blank'); if (!w) location.href = u; } catch (e) { location.href = u; } }
-if (ON_SITE && !/__BUILD/.test(BUILD)) { try { fetch('/?b=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => { const m = t.match(/const BUILD = '([0-9a-z]+)'/); if (m && m[1] !== BUILD && sessionStorage.getItem('mixio.upd') !== m[1]) { sessionStorage.setItem('mixio.upd', m[1]); location.replace('/?b=' + m[1] + location.hash); } }).catch(() => {}); } catch (e) {} }
+function updCheck() { if (!ON_SITE || /__BUILD/.test(BUILD)) return; try { fetch('/?b=' + Date.now(), { cache: 'no-store' }).then(r => r.text()).then(t => { const m = t.match(/const BUILD = '([0-9a-z]+)'/); if (m && m[1] !== BUILD && sessionStorage.getItem('mixio.upd') !== m[1]) { sessionStorage.setItem('mixio.upd', m[1]); try { persist(); } catch (e) {} location.replace('/?b=' + m[1] + location.hash); } }).catch(() => {}); } catch (e) {} }
+updCheck(); document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(() => { try { if (typeof state === 'undefined' || state !== 'play' || !glassLog.length) updCheck(); } catch (e) { updCheck(); } }, 400); });
 function saveLink() { let m = null; try { m = JSON.parse(localStorage.getItem('mixio.v1') || 'null'); const b = JSON.parse(localStorage.getItem('mixio.v1.best') || 'null'); if (b && (!m || (b.level || 1) > (m.level || 1))) m = b; } catch (e) {} const o = Object.assign({}, m && m.level ? m : save); delete o.coins; delete o.acct; o.eyeAll = (o.eyeAll || []).slice(-300); return SITE + '#mx=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(o))))); }
 /* cloud save: survives new versions, cleared site data and other devices */
 const CLOUD = { ref: null, busy: false, again: false, tm: 0, pushedT: 0 };
@@ -3943,6 +3944,59 @@ button:focus-visible{outline:2px solid rgb(var(--dna));outline-offset:2px}
 .seg button{position:relative;z-index:2;flex:1;font:650 13.5px var(--f);letter-spacing:.01em;border-radius:20px;color:rgba(255,255,255,.58);text-shadow:0 1px 1px rgba(0,0,0,.35);transition:color .3s,transform .18s}
 .seg button:active{transform:scale(.94)}
 .seg button[aria-pressed="true"]{color:#fff}
+
+#v-pp{padding-top:4px}
+.pphint{text-align:center;font:600 11px var(--f);letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin:14px 0 0;transition:opacity .4s}
+.book{position:relative;margin:6px auto 0;width:min(84vw,330px);aspect-ratio:.7;perspective:1600px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.book .pg{position:absolute;inset:0;transform-origin:0 50%;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .3s .7s;will-change:transform}
+.book .pg.fl{transform:rotateY(-178deg);opacity:0;pointer-events:none}
+.book .pg.fl.qk{transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .2s .75s}
+.book .sd{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:4px 14px 14px 4px;overflow:hidden}
+.book .sd.bk{transform:rotateY(180deg);background:#efe9dc}
+.book::after{content:"";position:absolute;left:4%;right:-2%;bottom:-6%;height:10%;background:radial-gradient(50% 50% at 50% 50%,rgba(0,0,0,.6),transparent);filter:blur(10px);z-index:-1}
+/* cover */
+.cov{background:radial-gradient(120% 90% at 30% 20%,#23305a,#141c38 55%,#0b1024);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),inset 6px 0 10px -4px rgba(0,0,0,.6),inset -2px 0 2px rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5%;color:#e9c876}
+.cov::before{content:"";position:absolute;inset:0;opacity:.35;background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0 2px,transparent 2px 5px),repeating-linear-gradient(-45deg,rgba(0,0,0,.08) 0 2px,transparent 2px 6px)}
+.cov::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,240,200,.16) 48%,transparent 60%);background-size:260% 100%;animation:covsh 6s ease-in-out infinite}
+@keyframes covsh{0%{background-position:120% 0}60%,100%{background-position:-60% 0}}
+.cov .t1{text-transform:uppercase;position:relative;font:800 13px var(--f);letter-spacing:.42em;text-indent:.42em;text-shadow:0 1px 0 rgba(0,0,0,.6),0 -1px 0 rgba(255,235,180,.25)}
+.cov svg{position:relative;width:42%;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))}
+.cov .t2{position:relative;font:900 30px var(--f);letter-spacing:-.04em;background:linear-gradient(180deg,#fff2c4,#d9ac4c 55%,#f6dc93);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 1px 0 rgba(0,0,0,.6))}
+.cov .t3{position:relative;font:700 10px var(--f);letter-spacing:.3em;text-transform:uppercase;opacity:.75}
+.cov .chip{position:absolute;right:9%;bottom:7%;width:13%;aspect-ratio:1.3;border-radius:3px;border:1.5px solid rgba(233,200,118,.75)}
+/* paper pages */
+.paper{background:radial-gradient(140% 100% at 0% 50%,rgba(120,96,60,.16),transparent 30%),repeating-radial-gradient(circle at 70% 40%,rgba(90,120,150,.07) 0 1px,transparent 1px 7px),linear-gradient(160deg,#f6f1e6,#ece4d2);color:#2a241b;box-shadow:inset 8px 0 14px -10px rgba(60,40,10,.5),inset 0 0 0 1px rgba(120,96,60,.12)}
+.paper .pn{position:absolute;bottom:3.5%;right:6%;font:600 9px var(--f);color:rgba(42,36,27,.4)}
+.paper .ph{position:absolute;top:4%;left:9%;right:6%;display:flex;justify-content:space-between;font:800 8.5px var(--f);letter-spacing:.24em;text-transform:uppercase;color:rgba(42,36,27,.45)}
+/* identity page */
+.idp{padding:15% 7% 7% 10%;display:flex;flex-direction:column;gap:4%}
+.idrow{display:flex;gap:6%}
+.idph{width:36%;aspect-ratio:.78;border-radius:6px;background:radial-gradient(circle at 36% 30%,#fff,var(--dna) 28%,color-mix(in srgb,var(--dna) 55%,#000) 90%);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12),0 2px 6px rgba(60,40,10,.2);position:relative;overflow:hidden}
+.idph::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.12) 0 2px,transparent 2px 6px)}
+.idf{flex:1;display:flex;flex-direction:column;gap:7px;min-width:0}
+.idf div{display:flex;flex-direction:column}
+.idf small{font:700 7.5px var(--f);letter-spacing:.18em;text-transform:uppercase;color:rgba(42,36,27,.45)}
+.idf b{font:700 13px var(--f);color:#2a241b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idst{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:2%}
+.idst div{padding:7px 8px;border-radius:8px;background:rgba(42,36,27,.05);box-shadow:inset 0 0 0 1px rgba(42,36,27,.08)}
+.idst small{display:block;font:700 7.5px var(--f);letter-spacing:.16em;text-transform:uppercase;color:rgba(42,36,27,.45)}
+.idst b{font:800 17px var(--f)}.idst b.g{color:#b0801f}
+.mrz{text-transform:uppercase;margin-top:auto;font:600 9.5px ui-monospace,Menlo,monospace;letter-spacing:.08em;color:rgba(42,36,27,.55);line-height:1.5;word-break:break-all}
+.ppmore{position:relative;margin-top:6px;align-self:flex-start;font:700 10px var(--f);letter-spacing:.06em;color:#2a241b;padding:6px 10px;border-radius:99px;background:rgba(42,36,27,.07);box-shadow:inset 0 0 0 1px rgba(42,36,27,.12)}
+/* stamps page */
+.stp{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:4%;padding:15% 7% 10% 11%}
+.stamp{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:6px;color:var(--ink);transform:rotate(var(--r));mix-blend-mode:multiply;opacity:.88;border:2px solid var(--ink);border-radius:var(--br);box-shadow:inset 0 0 0 3px #f2ecdf,inset 0 0 0 4px var(--ink);text-align:center}
+.stamp img{width:30px;height:21px;border-radius:2px;object-fit:cover;filter:saturate(.85);mix-blend-mode:normal}
+.stamp b{font:800 9.5px/1.1 var(--f);letter-spacing:.12em;text-transform:uppercase!important;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.stamp small{font:700 8px var(--f);letter-spacing:.14em;opacity:.8}
+.stamp i{font:600 7px var(--f);font-style:normal;letter-spacing:.1em;opacity:.6}
+.stamp.gold{--ink:#b07d18;mix-blend-mode:normal;opacity:1;background:radial-gradient(120% 120% at 30% 20%,rgba(255,236,180,.55),rgba(233,190,90,.18) 60%,transparent);box-shadow:inset 0 0 0 3px #f2ecdf,inset 0 0 0 4px #c9962a,0 0 14px -4px rgba(220,170,60,.6)}
+.stamp.gold b{background:linear-gradient(90deg,#8a5d0c,#d9a83e,#8a5d0c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stamp.empty{border-style:dashed;opacity:.25;box-shadow:none}
+.ppnav{display:flex;justify-content:center;align-items:center;gap:14px;margin-top:16px}
+.ppnav button{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.07);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 0 0 .5px rgba(255,255,255,.14);font:700 16px var(--f);color:#fff}
+.ppnav button:disabled{opacity:.3}
+.ppnav span{font:600 12px var(--f);color:var(--mut);min-width:70px;text-align:center}
 .empty{font-size:13px;color:var(--mut);text-align:center;padding:10px 0 0}
 
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
@@ -4131,7 +4185,7 @@ button:focus-visible{outline:2px solid rgb(var(--dna));outline-offset:2px}
  <div class="hd"><div class="ttl">collection</div><div class="chroma" id="bal" aria-label="chroma"><i></i><span id="balN">0</span></div></div>
  <div class="seg" role="tablist"><i class="lens"></i><button data-s="packs" aria-pressed="true">packs</button><button data-s="col" aria-pressed="false">cards</button><button data-s="pp" aria-pressed="false">passport</button></div>
  <section class="view on" id="v-packs"><div class="sub" style="margin-top:0">base set packs</div><div class="packs" id="packs"></div><div class="odds" id="odds"></div></section>
- <section class="view" id="v-col"><div class="prog"><span id="pN">0/50</span><div class="bar"><i id="pB" style="width:0"></i></div><span id="pS"></span></div><div class="cgrid" id="cgrid"></div><div class="empty" id="cEmpty" hidden>open a pack to start your collection</div></section>
+ <section class="view" id="v-pp"><div class="book" id="book"></div><div class="ppnav"><button id="ppPrev" aria-label="previous page">‹</button><span id="ppN"></span><button id="ppNext" aria-label="next page">›</button></div><div class="pphint" id="ppHint">tap the passport to open</div></section><section class="view" id="v-col"><div class="prog"><span id="pN">0/50</span><div class="bar"><i id="pB" style="width:0"></i></div><span id="pS"></span></div><div class="cgrid" id="cgrid"></div><div class="empty" id="cEmpty" hidden>open a pack to start your collection</div></section>
 </div></div><div class="stage" id="stage">
   <canvas class="hbg" id="hbg"></canvas><div class="swirl"></div><div class="dim" style="background:radial-gradient(70% 55% at 50% 45%,transparent,rgba(0,0,0,.45))"></div><div class="rl" id="rl"></div>
   <div class="hint" id="hint"></div><div class="count" id="count"></div>
@@ -4320,8 +4374,34 @@ function renderCol(){const g=$('#cgrid');g.innerHTML='';let have=0;
 /* ---------- backs + fronts gallery ---------- */
 
 function lens(v){const b=R.querySelector(`.seg button[data-s="${v}"]`),L=R.querySelector('.seg .lens');if(!b||!L||!b.offsetWidth)return;L.style.width=b.offsetWidth+'px';L.style.transform=`translateX(${b.offsetLeft}px)`;}
-function seg(v){R.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===v));requestAnimationFrame(()=>lens(v));R.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));if(v==='col')renderCol();$('#page').scrollTop=0;}
-R.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{try{buzz(5);}catch(e){}if(b.dataset.s==='pp'){lens('pp');const cur=(R.querySelector('.seg button[aria-pressed="true"]')||{}).dataset;setTimeout(()=>{try{openPassport();}catch(e){}},180);setTimeout(()=>lens(cur&&cur.s||'packs'),700);return;}seg(b.dataset.s);});
+let ppI=0,ppN=0;
+function renderPP(){const B=$('#book');const got={};(save.palette||[]).forEach(p=>{if((p.p||0)>=50)got[p.n]=p;});let CP={};try{CP=countryProg();}catch(e){}
+ const cs=getCountries().map(c=>{const f=c.ns.filter(n=>got[n]);return{c,f,p:CP[c.cc],d:f.reduce((m,n)=>Math.min(m,got[n].d||Infinity),Infinity)};}).filter(x=>x.f.length).sort((a,b)=>((b.p&&b.p.done)?1:0)-((a.p&&a.p.done)?1:0)||b.f.length-a.f.length);
+ let name='player';try{name=(SB.uname()||(save.idn&&save.idn.name)||'player');}catch(e){}
+ let dna='#7fd7ff';try{const c=idColor(save.idn);dna='#'+c.map(v=>Math.round(v*255).toString(16).padStart(2,'0')).join('');}catch(e){}
+ const S=(()=>{try{return passportSummary();}catch(e){return{stars:0,maxStars:0,stamped:cs.length}}})();
+ const gold=cs.filter(x=>x.p&&x.p.done).length, found=Object.keys(got).length, eye=(Math.round((save.eye||0)*10)/10).toFixed(1);
+ const INK=['#24407a','#7a2430','#2a5e3c','#5a2f7a','#7a4a1c','#1f5d6b'];const h=s=>{let x=7;for(const ch of s)x=(x*31+ch.charCodeAt(0))%9973;return x;};
+ const mrz=('P<MIX'+name.toUpperCase().replace(/[^A-Z]/g,'')+'<<'+'<'.repeat(30)).slice(0,30)+'\n'+('L'+String(save.level||1).padStart(3,'0')+'<C'+String(cs.length).padStart(3,'0')+'<G'+String(gold).padStart(2,'0')+'<'.repeat(30)).slice(0,30);
+ const pages=[];
+ pages.push(`<div class="sd cov"><span class="t1">PASSPORT</span><svg viewBox="0 0 100 100" fill="none" stroke="#e9c876" stroke-width="2.2"><circle cx="50" cy="50" r="40"/><ellipse cx="50" cy="50" rx="17" ry="40"/><path d="M10 50h80M16 30h68M16 70h68"/></svg><span class="t2">mix.io</span><span class="t3">${esc(name)}</span><i class="chip"></i></div><div class="sd bk paper"></div>`);
+ pages.push(`<div class="sd paper idp" style="--dna:${dna}"><div class="ph"><span>mix.io · passport</span><span>p. 1</span></div><div class="idrow"><div class="idph"></div><div class="idf"><div><small>name</small><b>${esc(name)}</b></div><div><small>level</small><b>${save.level||1}</b></div><div><small>eye</small><b>${eye}</b></div><div><small>issued</small><b>${new Date(save.first||Date.now()).toLocaleDateString('en-US',{month:'short',year:'numeric'}).toLowerCase()}</b></div></div></div>
+  <div class="idst"><div><small>colors found</small><b>${found}</b></div><div><small>countries</small><b>${cs.length}</b></div><div><small>complete</small><b class="g">${gold}</b></div><div><small>stars</small><b>${S.stars||0}</b></div></div><button class="ppmore" id="ppMore">milestones & collections ›</button><div class="mrz">${esc(mrz).replace('\n','<br>')}</div><span class="pn">1</span></div><div class="sd bk paper"></div>`);
+ const per=6;const np=Math.max(1,Math.ceil(cs.length/per));
+ for(let k=0;k<np;k++){const sl=cs.slice(k*per,k*per+per);let cells='';for(let j=0;j<per;j++){const x=sl[j];if(!x){cells+=`<div class="stamp empty" style="--ink:#8a7a60;--r:0deg;--br:10px"></div>`;continue;}const hh=h(x.c.cc),g=x.p&&x.p.done,ink=INK[hh%INK.length],r=((hh%11)-5)*1.2,br=hh%3===0?'50%':hh%3===1?'10px':'18px 4px';
+   const nm=(x.c.cc==='aq'?'antarctica':(COUNTRY[x.c.cc]||x.c.name||x.c.cc)).toString();const dt=isFinite(x.d)?new Date(x.d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'2-digit'}).toUpperCase():'';
+   cells+=`<div class="stamp${g?' gold':''}" style="--ink:${ink};--r:${r}deg;--br:${br}">${FLAGS&&FLAGS[x.c.cc]?`<img alt="" src="${FLAGS[x.c.cc]}">`:''}<b>${esc(nm)}</b><small>${g?'complete':x.p?`${x.p.k}/${x.p.n}`:x.f.length+' found'}</small><i>${dt}</i></div>`;}
+  pages.push(`<div class="sd paper stp"><div class="ph"><span>entries · visas</span><span>p. ${k+2}</span></div>${cells}<span class="pn">${k+2}</span></div><div class="sd bk paper"></div>`);}
+ ppN=pages.length;B.innerHTML=pages.map((h,k)=>`<div class="pg${k<ppI?' fl':''}" style="z-index:${ppN-k}">${h}</div>`).join('');
+ const more=$('#ppMore');if(more)more.onclick=e=>{e.stopPropagation();try{buzz(5);openPassport();}catch(x){}};
+ ppUpd();}
+function ppUpd(){R.querySelectorAll('#book .pg').forEach((p,k)=>p.classList.toggle('fl',k<ppI));$('#ppPrev').disabled=ppI<=0;$('#ppNext').disabled=ppI>=ppN-1;$('#ppN').textContent=ppI===0?'cover':ppI===1?'identity':`entries ${ppI-1}/${ppN-2}`;$('#ppHint').style.opacity=ppI===0?1:0;}
+function ppGo(d){const n=Math.max(0,Math.min(ppN-1,ppI+d));if(n===ppI)return;ppI=n;try{buzz(d>0?8:5);}catch(e){}ppUpd();}
+$('#ppPrev').onclick=()=>ppGo(-1);$('#ppNext').onclick=()=>ppGo(1);
+{const B=$('#book');let sx=null,sy=0;B.addEventListener('pointerdown',e=>{sx=e.clientX;sy=e.clientY;});B.addEventListener('pointerup',e=>{if(sx==null)return;const dx=e.clientX-sx,dy=e.clientY-sy;sx=null;if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy))ppGo(dx<0?1:-1);else if(Math.abs(dx)<8&&Math.abs(dy)<8){if(e.target.closest('#ppMore'))return;const r=B.getBoundingClientRect();ppGo(ppI===0||e.clientX>r.left+r.width*.4?1:-1);}});B.addEventListener('pointercancel',()=>sx=null);}
+
+function seg(v){R.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===v));requestAnimationFrame(()=>lens(v));R.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));if(v==='col')renderCol();if(v==='pp')renderPP();$('#page').scrollTop=0;}
+R.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{try{buzz(5);}catch(e){}seg(b.dataset.s);});
 
 if(save.chroma==null&&(save.level||1)<=1)save.chroma=100;
 renderPacks();
